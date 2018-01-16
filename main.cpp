@@ -1,16 +1,11 @@
-﻿#include <iostream>
-#include <vector>
-#include <memory>
-#include "Maze.h"
-#include "Display.h"
+﻿#include "Generator.h"
 
 
 int main()
 {
-	Maze maze(4, 3); //Maze maze(10, 36);
-					 //Display::printMazeValues(maze);
-	Display::printMaze(maze);
-	maze.carve();
+	Generator generator(4, 3);
+	generator.generate();
 	system("pause");
 	return 0;
+	
 }

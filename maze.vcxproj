@@ -76,7 +76,13 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>C:\codecool\Cpp\maze\SDL2-2.0.7\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>C:\codecool\Cpp\maze\SDL2-2.0.7\lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <SubSystem>Console</SubSystem>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -117,12 +123,14 @@
   <ItemGroup>
     <ClCompile Include="Cell.cpp" />
     <ClCompile Include="Display.cpp" />
+    <ClCompile Include="Generator.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Maze.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Cell.h" />
     <ClInclude Include="Display.h" />
+    <ClInclude Include="Generator.h" />
     <ClInclude Include="Maze.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
