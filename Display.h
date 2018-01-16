@@ -1,10 +1,11 @@
 #pragma once
-#include "Maze.h"
+#include <SDL.h>
 #include <memory>
 #include <iostream>
-#include <SDL.h>
+#include "Maze.h"
 
-#undef main
+// this is a weird solution, but it works:
+//#undef main
 
 
 //#include <SDL_image.h>

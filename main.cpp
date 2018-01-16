@@ -1,7 +1,7 @@
 ﻿#include "Generator.h"
 
 
-int main()
+int main(int argc, char *args[])
 {
 	Generator generator(4, 3);
 	generator.generate();

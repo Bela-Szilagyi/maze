@@ -1,5 +1,4 @@
 #include <iostream>
-#include "Display.h"
 #include "Generator.h"
 
 
