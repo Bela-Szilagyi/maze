@@ -3,7 +3,7 @@
 #include <random>
 #include <iostream>
 
-Maze::Maze(int rows, int columns)
+Maze::Maze(int rows, int columns) : height(rows), width(columns)
 {
 	std::vector<std::shared_ptr<Cell>> cells;
 	for (int i = 0; i < rows * columns; ++i)
@@ -79,8 +79,8 @@ void Maze::carve() //Recursive backtracker
 			std::shared_ptr<Cell> randomCell = unvisitedNeighbors[randomNumber]; //1. Choose randomly one of the unvisited neighbours
 			stack.push_back(currCell); //2. Push the current cell to the stack
 			removeWall(currCell, randomCell); //3. Remove the wall between the current cell and the chosen cell
-			std::cout << "step: " << ++step << " removing wall between " << currCell->value << " and " << randomCell->value << std::endl;
-			Display::printMaze(*this); //to see how the iteration goes
+			//std::cout << "step: " << ++step << " removing wall between " << currCell->value << " and " << randomCell->value << std::endl;
+			//Display::printMaze(*this); //to see how the iteration goes
 			currCell = randomCell; //4. Make the chosen cell the current cell 
 			currCell->isVisited = true; //and mark it as visited
 		}

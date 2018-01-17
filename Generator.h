@@ -12,7 +12,7 @@ public:
 	Generator (int height, int width);
 	~Generator();
 
-	void generate();
+	Maze generate();
 private:
 	Display display;
 	Maze maze;

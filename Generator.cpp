@@ -16,13 +16,14 @@ Generator::~Generator()
 {
 }
 
-void Generator::generate()
+Maze Generator::generate()
 {
 	//Maze maze(4, 3); //Maze maze(10, 36);
 					 //Display::printMazeValues(maze);
 	//
 	//maze = std::make_unique<Maze>(height, width);
 	//maze
-	Display::printMaze(maze);
-	maze.carve();
+	//Display::printMaze(maze);
+	//maze.carve();
+	return maze;
 }
