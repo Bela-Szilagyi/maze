@@ -1,14 +1,16 @@
 ﻿#include "Generator.h"
+#include "Displayer.h"
 
 
 int main(int argc, char *args[])
 {
-	Generator generator(60, 120);
+	Generator generator(10, 10);
 	Maze maze = generator.generate();
 	Display display;
-	display.showMaze(maze);
-	maze.carve();
-	display.showMaze(maze);
+	Displayer displayer(maze, display);
+	displayer.show(maze);
+	//maze.carve();
+	//displayer.show(maze);
 	system("pause");
 	return 0;
 }

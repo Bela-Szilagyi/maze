@@ -127,6 +127,7 @@
   <ItemGroup>
     <ClCompile Include="Cell.cpp" />
     <ClCompile Include="Display.cpp" />
+    <ClCompile Include="Displayer.cpp" />
     <ClCompile Include="Generator.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Maze.cpp" />
@@ -134,6 +135,7 @@
   <ItemGroup>
     <ClInclude Include="Cell.h" />
     <ClInclude Include="Display.h" />
+    <ClInclude Include="Displayer.h" />
     <ClInclude Include="Generator.h" />
     <ClInclude Include="Maze.h" />
   </ItemGroup>
