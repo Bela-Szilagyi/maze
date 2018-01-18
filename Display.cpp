@@ -95,7 +95,7 @@ void Display::showMaze(const Maze &m, const std::shared_ptr<Cell> currCell)
 	SDL_RenderClear(renderer);	
 	int xOffset = 10;
 	int yOffset = 10;
-	int cellSize = 20;
+	int cellSize = 40;
 	std::shared_ptr<Cell> actCell = m.root;
 	std::shared_ptr<Cell> firstInRow = actCell;
 	for (int row = 0; row < m.height; ++row)
