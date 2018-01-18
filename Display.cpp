@@ -115,23 +115,30 @@ void Display::showMaze(const Maze &m, const std::shared_ptr<Cell> currCell)
 			// if it is the actCell -> green
 			//std::cout << row * m.width + column << " : " << currCell->value<< '\n';
 			//if (row * m.width + column == currCell->value - 1) SDL_SetRenderDrawColor(renderer, 0, 255, 0, SDL_ALPHA_OPAQUE); //green
-			if (actCell == currCell) SDL_SetRenderDrawColor(renderer, 0, 255, 0, SDL_ALPHA_OPAQUE); //green
+			//if (actCell == currCell) SDL_SetRenderDrawColor(renderer, 0, 255, 0, SDL_ALPHA_OPAQUE); //green
+			if (actCell == currCell) SDL_SetRenderDrawColor(renderer, 155, 193, 188, SDL_ALPHA_OPAQUE); //camridge blue
+			//else if isPppped -> purple
+			//else if (actCell->isPopped) SDL_SetRenderDrawColor(renderer, 255, 0, 255, SDL_ALPHA_OPAQUE); //purple
+			else if (actCell->isPopped) SDL_SetRenderDrawColor(renderer, 92, 164, 169, SDL_ALPHA_OPAQUE); //cadet blue
 			// else if it is visited -> yellow
-			else if (actCell->isVisited) SDL_SetRenderDrawColor(renderer, 255, 255, 0, SDL_ALPHA_OPAQUE); //yellow
+			//else if (actCell->isVisited) SDL_SetRenderDrawColor(renderer, 255, 255, 0, SDL_ALPHA_OPAQUE); //yellow -> dead end
+			else if (actCell->isVisited) SDL_SetRenderDrawColor(renderer, 230, 235, 224, SDL_ALPHA_OPAQUE); //platinum -> dead end
 			// else -> blue
-			else SDL_SetRenderDrawColor(renderer, 0, 0, 255, SDL_ALPHA_OPAQUE); //blue
+			//else SDL_SetRenderDrawColor(renderer, 0, 0, 255, SDL_ALPHA_OPAQUE); //blue
+			else SDL_SetRenderDrawColor(renderer, 244, 241, 187, SDL_ALPHA_OPAQUE); //blond
 			//SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE); //black
 			
 			
 			SDL_RenderFillRect(renderer, &rect);
-			SDL_SetRenderDrawColor(renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
+			//SDL_SetRenderDrawColor(renderer, 255, 0, 0, SDL_ALPHA_OPAQUE); //red
+			SDL_SetRenderDrawColor(renderer, 237, 106, 90, SDL_ALPHA_OPAQUE); //terra cotta
 			int actCellLeftX = xOffset + column * cellSize;
 			int actCellUpperY = yOffset + row * cellSize;
 			//std::cout << "\tactCellLeftX: " << actCellLeftX << " actCellUpperY: " << actCellUpperY << '\n';
-			if (actCell->nWall) SDL_RenderDrawLine(renderer, actCellLeftX, actCellUpperY, actCellLeftX + cellSize, actCellUpperY);
-			if (actCell->eWall) SDL_RenderDrawLine(renderer, actCellLeftX + cellSize, actCellUpperY, actCellLeftX + cellSize, actCellUpperY + cellSize);
-			if (actCell->sWall) SDL_RenderDrawLine(renderer, actCellLeftX + cellSize, actCellUpperY + cellSize, actCellLeftX, actCellUpperY + cellSize);
-			if (actCell->wWall) SDL_RenderDrawLine(renderer, actCellLeftX, actCellUpperY + cellSize, actCellLeftX, actCellUpperY);
+			if (actCell->nWall) SDL_RenderDrawLine(renderer, actCellLeftX, actCellUpperY, actCellLeftX + cellSize - 1, actCellUpperY);
+			if (actCell->eWall) SDL_RenderDrawLine(renderer, actCellLeftX + cellSize - 1, actCellUpperY, actCellLeftX + cellSize - 1, actCellUpperY + cellSize - 1);
+			if (actCell->sWall) SDL_RenderDrawLine(renderer, actCellLeftX + cellSize - 1, actCellUpperY + cellSize - 1, actCellLeftX, actCellUpperY + cellSize - 1);
+			if (actCell->wWall) SDL_RenderDrawLine(renderer, actCellLeftX, actCellUpperY + cellSize - 1, actCellLeftX, actCellUpperY);
 			
 			SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE); //black
 

@@ -17,4 +17,5 @@ public:
 	//TODO value private 
 	int value;
 	bool isVisited = false;
+	bool isPopped = false;
 };

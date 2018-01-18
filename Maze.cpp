@@ -84,6 +84,7 @@ std::shared_ptr<Cell> Maze::carve(std::shared_ptr<Cell> currCell) //Recursive ba
 	else if (!stack.empty()) //2. Else if stack is not empty
 	{
 		currCell = stack.back();//stack[stack.size() - 1]; // 1. Pop a cell from the stack
+		currCell->isPopped = true;
 		stack.pop_back(); // 2. Make it the current cell
 	}
 	return currCell;
