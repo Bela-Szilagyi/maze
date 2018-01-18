@@ -90,12 +90,12 @@ Display::Display()
 	*/
 }
 
-void Display::showMaze(const Maze &m)
+void Display::showMaze(const Maze &m, const std::shared_ptr<Cell> currCell)
 {
 	SDL_RenderClear(renderer);	
 	int xOffset = 10;
 	int yOffset = 10;
-	int cellSize = 40;
+	int cellSize = 20;
 	std::shared_ptr<Cell> actCell = m.root;
 	std::shared_ptr<Cell> firstInRow = actCell;
 	for (int row = 0; row < m.height; ++row)
@@ -110,7 +110,19 @@ void Display::showMaze(const Maze &m)
 			rect.w = cellSize;
 			rect.h = cellSize;
 			//SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE); //white
-			SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE); //black
+			
+			//decide color
+			// if it is the actCell -> green
+			//std::cout << row * m.width + column << " : " << currCell->value<< '\n';
+			//if (row * m.width + column == currCell->value - 1) SDL_SetRenderDrawColor(renderer, 0, 255, 0, SDL_ALPHA_OPAQUE); //green
+			if (actCell == currCell) SDL_SetRenderDrawColor(renderer, 0, 255, 0, SDL_ALPHA_OPAQUE); //green
+			// else if it is visited -> yellow
+			else if (actCell->isVisited) SDL_SetRenderDrawColor(renderer, 255, 255, 0, SDL_ALPHA_OPAQUE); //yellow
+			// else -> blue
+			else SDL_SetRenderDrawColor(renderer, 0, 0, 255, SDL_ALPHA_OPAQUE); //blue
+			//SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE); //black
+			
+			
 			SDL_RenderFillRect(renderer, &rect);
 			SDL_SetRenderDrawColor(renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
 			int actCellLeftX = xOffset + column * cellSize;
@@ -121,6 +133,8 @@ void Display::showMaze(const Maze &m)
 			if (actCell->sWall) SDL_RenderDrawLine(renderer, actCellLeftX + cellSize, actCellUpperY + cellSize, actCellLeftX, actCellUpperY + cellSize);
 			if (actCell->wWall) SDL_RenderDrawLine(renderer, actCellLeftX, actCellUpperY + cellSize, actCellLeftX, actCellUpperY);
 			
+			SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE); //black
+
 			if (actCell->eNeighbor) actCell = actCell->eNeighbor;	
 		}
 		if (firstInRow->sNeighbor) firstInRow = firstInRow->sNeighbor;
