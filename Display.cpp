@@ -79,7 +79,7 @@ void Display::printMaze(const Maze &m)
 Display::Display()
 	: window(nullptr), renderer(nullptr)
 {
-	init();
+	//init();
 	//background = loadTexture("MercatorEarth.png");
 
 	/*

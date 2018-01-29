@@ -130,17 +130,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ARobot.cpp" />
     <ClCompile Include="Cell.cpp" />
     <ClCompile Include="Display.cpp" />
-    <ClCompile Include="Generator.cpp" />
+    <ClCompile Include="Logic.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Maze.cpp" />
+    <ClCompile Include="Robot.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ARobot.h" />
     <ClInclude Include="Cell.h" />
     <ClInclude Include="Display.h" />
-    <ClInclude Include="Generator.h" />
+    <ClInclude Include="Logic.h" />
     <ClInclude Include="Maze.h" />
+    <ClInclude Include="Robot.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

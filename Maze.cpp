@@ -4,6 +4,7 @@
 
 Maze::Maze(int rows, int columns) : height(rows), width(columns)
 {
+	std::cout << "height: " << height << " width: " << width << '\n';
 	std::vector<std::shared_ptr<Cell>> cells;
 	for (int i = 0; i < rows * columns; ++i)
 	{
