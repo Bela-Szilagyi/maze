@@ -99,11 +99,11 @@ void Logic::run()
 			{
 				currCell = maze.carve(currCell);
 				display.showMaze(maze, currCell);
-				if (SDL_PollEvent(&SDL_event) != 0) {
-					if (SDL_event.type == SDL_QUIT) {
+				if (SDL_PollEvent(&SDL_event) != 0 && SDL_event.type == SDL_QUIT) {
+					//if (SDL_event.type == SDL_QUIT) {
 						quit = handleEvents(SDL_event);
 						break;
-					}
+					//}
 				}
 				std::cout << "carving\n";
 			} while (!(maze.unvisitedNeighbors.empty() && maze.stack.empty())); //2. While there are unvisited cells
