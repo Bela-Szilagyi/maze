@@ -5,7 +5,6 @@
 Maze::Maze(int rows, int columns) : height(rows), width(columns)
 {
 	std::cout << "height: " << height << " width: " << width << '\n';
-	std::vector<std::shared_ptr<Cell>> cells;
 	for (int i = 0; i < rows * columns; ++i)
 	{
 		cells.emplace_back(std::make_shared<Cell>(i));
@@ -22,8 +21,6 @@ Maze::Maze(int rows, int columns) : height(rows), width(columns)
 		if (i % columns != 0) cells[i]->wNeighbor = cells[i - 1];
 	}
 	root = cells[0];
-
-
 };
 
 void Maze::removeWall(std::shared_ptr<Cell>& currCell, std::shared_ptr<Cell>& neighbor)
@@ -90,3 +87,7 @@ std::shared_ptr<Cell> Maze::carve(std::shared_ptr<Cell> currCell) //Recursive ba
 	}
 	return currCell;
 };
+
+int Maze::getCellRow(std::shared_ptr<Cell> cell) { return cell->value % width; };
+int Maze::getCellColumn(std::shared_ptr<Cell> cell) { return cell->value / width; };
+

@@ -21,8 +21,12 @@ public:
 	std::vector< std::shared_ptr<Cell> > stack;
 	int step = 0;
 
-private:
+	std::vector<std::shared_ptr<Cell>> cells;
+
+	int getCellRow(std::shared_ptr<Cell> cell);
+	int getCellColumn(std::shared_ptr<Cell> cell);
 	void removeWall(std::shared_ptr<Cell>& currCell, std::shared_ptr<Cell>& neighbor);
+private:
 	void getUnvisitedNeighbors(std::shared_ptr<Cell> &currCell, std::vector<std::shared_ptr<Cell>> &unvisitedNeighbors);
 };
 

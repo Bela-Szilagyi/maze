@@ -1,6 +1,15 @@
 #pragma once
 
 #include <memory>
+#include <vector>
+
+enum Walls
+{
+	north,
+	east,
+	south,
+	west
+};
 
 class Cell
 {
@@ -18,4 +27,8 @@ public:
 	int value;
 	bool isVisited = false;
 	bool isPopped = false;
+
+	int numOfInnerWalls();
+	int numOfAllWalls();
+	void getInnerWalls(std::vector<Walls>& walls);
 };

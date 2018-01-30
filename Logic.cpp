@@ -77,45 +77,96 @@ bool Logic::popup()
 	return buttonid;
 }
 
+
+void Logic::doLogic()
+{
+	if (logicalState == create) createMaze();
+	else if (logicalState == makeMazeUnperfect) makeUnperfect();
+	else if (logicalState == aStar) std::cout << "AStar algo begins\n";
+	else if (logicalState == closeWindow) return;
+}
+
+void Logic::createMaze()
+{
+	std::shared_ptr<Cell> currCell = maze.root; //1. Make the initial cell the current cell
+												//currCell->isVisited = true;	//and mark it as visited
+	SDL_Event SDL_event;
+	do
+	{
+		currCell = maze.carve(currCell);
+		display.showMaze(maze, currCell);
+		if (SDL_PollEvent(&SDL_event) != 0 && SDL_event.type == SDL_QUIT) {
+			logicalState = closeWindow;
+			return;
+		}
+		std::cout << "carving\n";
+	} while (!(maze.unvisitedNeighbors.empty() && maze.stack.empty())); //2. While there are unvisited cells
+	logicalState = makeMazeUnperfect;
+}
+
+void Logic::makeUnperfect()
+{
+	std::cout << "Making maze unperfect\n";
+	// for randomization
+	std::random_device device;
+	std::mt19937 generator(device());
+	//std::uniform_int_distribution<int> distribution(0, ... - 1);
+	//int randomNumber = distribution(generator);
+	SDL_Event SDL_event;
+	for (auto & cell : maze.cells)
+	{
+		//if cell has 3 walls, "randomly" remove wall: 
+		if (cell->numOfAllWalls() == 3)
+		{
+			//	decide if remove randomly
+			std::uniform_int_distribution<int> distribution(1, 10);
+			int randomNumber = distribution(generator);
+			if (randomNumber > 7)
+			{
+				//	if remove: remove a random wall which is not an outside wall
+				std::vector<Walls> walls{};
+				cell->getInnerWalls(walls);
+				std::uniform_int_distribution<int> distribution(0, walls.size() - 1);
+				int randomWall = distribution(generator);
+				std::shared_ptr<Cell> neighbor;
+				if (walls[randomWall] == Walls::north) neighbor = cell->nNeighbor;
+				if (walls[randomWall] == Walls::east) neighbor = cell->eNeighbor;
+				if (walls[randomWall] == Walls::south) neighbor = cell->sNeighbor;
+				if (walls[randomWall] == Walls::west) neighbor = cell->wNeighbor;
+				maze.removeWall(cell, neighbor);
+			}
+		}
+		
+		display.showMaze(maze, cell);
+		if (SDL_PollEvent(&SDL_event) != 0 && SDL_event.type == SDL_QUIT) {
+			logicalState = closeWindow;
+			return;
+		}
+	}
+	std::cout << "Making maze unperfect done\n";
+	logicalState = aStar;
+}
+
 void Logic::run()
 {
 	Display::printMaze(maze);
 	display.init();
+	Logic::logicalState = create;
 	bool quit = false;
 	Uint32 timePassed = 0;
 	Uint32 timeStep = 16;
 	ARobot aRobot(maze);
-	bool doSomething = false;
 	while (!quit)
 	{
 		timePassed = SDL_GetTicks();
-		SDL_Event SDL_event;
-		while (SDL_PollEvent(&SDL_event) != 0)
-		{
-			quit = handleEvents(SDL_event);
-			std::shared_ptr<Cell> currCell = maze.root; //1. Make the initial cell the current cell
-														//currCell->isVisited = true;	//and mark it as visited
-			do
-			{
-				currCell = maze.carve(currCell);
-				display.showMaze(maze, currCell);
-				if (SDL_PollEvent(&SDL_event) != 0 && SDL_event.type == SDL_QUIT) {
-					//if (SDL_event.type == SDL_QUIT) {
-						quit = handleEvents(SDL_event);
-						break;
-					//}
-				}
-				std::cout << "carving\n";
-			} while (!(maze.unvisitedNeighbors.empty() && maze.stack.empty())); //2. While there are unvisited cells
-			while (!doSomething)
-			{
-				aRobot.getInfo();
-				doSomething = true;
-			} 
-			while (timePassed + timeStep > SDL_GetTicks())
-			{
-				SDL_Delay(0);
-			}
-		}
+		// SDL_Event SDL_event;
+		// while (SDL_PollEvent(&SDL_event) != 0)
+		//{
+			// quit = handleEvents(SDL_event);
+			doLogic();
+			quit = true;
+			while (timePassed + timeStep > SDL_GetTicks()) SDL_Delay(0);
+		//}
 	}
+	//system("pause");
 }
