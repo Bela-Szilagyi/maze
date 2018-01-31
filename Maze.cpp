@@ -8,6 +8,8 @@ Maze::Maze(int rows, int columns) : height(rows), width(columns)
 	for (int i = 0; i < rows * columns; ++i)
 	{
 		cells.emplace_back(std::make_shared<Cell>(i));
+		cells[i]->row = i / width;
+		cells[i]->col = i % width;
 	}
 	for (int i = 0; i < rows * columns; ++i)
 	{

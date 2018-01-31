@@ -82,7 +82,7 @@ void Logic::doLogic()
 {
 	if (logicalState == create) createMaze();
 	else if (logicalState == makeMazeUnperfect) makeUnperfect();
-	else if (logicalState == aStar) std::cout << "AStar algo begins\n";
+	else if (logicalState == aStar) AStarSolveMaze(); //std::cout << "AStar algo begins\n";
 	else if (logicalState == closeWindow) return;
 }
 
@@ -106,6 +106,8 @@ void Logic::createMaze()
 
 void Logic::makeUnperfect()
 {
+	logicalState = aStar;
+	return;
 	std::cout << "Making maze unperfect\n";
 	// for randomization
 	std::random_device device;
@@ -166,7 +168,6 @@ void Logic::run()
 	bool quit = false;
 	Uint32 timePassed = 0;
 	Uint32 timeStep = 16;
-	ARobot aRobot(maze);
 	while (!quit)
 	{
 		timePassed = SDL_GetTicks();
@@ -180,4 +181,19 @@ void Logic::run()
 		//}
 	}
 	//system("pause");
+}
+
+void Logic::AStarSolveMaze()
+{
+	ARobot aRobot(maze);
+	std::vector< std::shared_ptr<Cell> > path = aRobot.solveMaze();
+
+	std::cout << "Path size: " << path.size() << '\n';
+
+	for (auto& cella : path) {
+		display.showMaze(maze, cella);
+		SDL_Delay(200);
+	}
+
+	logicalState = LogicalState::systemPause;
 }

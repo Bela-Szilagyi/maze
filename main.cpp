@@ -10,7 +10,7 @@ void renderAll()
 
 int main(int argc, char *args[])
 {
-	Logic logic(15, 30);
+	Logic logic(4, 4);
 	logic.run();
 	//system("pause");
 	return 0;

@@ -31,4 +31,8 @@ public:
 	int numOfInnerWalls();
 	int numOfAllWalls();
 	void getInnerWalls(std::vector<Walls>& walls);
+	unsigned int col;
+	unsigned int row;
+	unsigned int fScore;
+	unsigned int gScore;
 };

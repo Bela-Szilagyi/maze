@@ -14,6 +14,7 @@ enum LogicalState
 	create,
 	makeMazeUnperfect,
 	aStar,
+	systemPause,
 	closeWindow
 };
 
@@ -27,6 +28,7 @@ public:
 	void doLogic();
 	void createMaze();
 	void makeUnperfect();
+	void AStarSolveMaze();
 private:
 	bool handleEvents(SDL_Event &event);
 	bool popup();
