@@ -2,7 +2,9 @@
 #include "Robot.h"
 #include <set>
 #include <map>
+#include <vector>
 #include <cstdlib>
+#include <algorithm>
 
 class ARobot :	public Robot
 {

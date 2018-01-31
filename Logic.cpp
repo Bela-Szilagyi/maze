@@ -106,8 +106,6 @@ void Logic::createMaze()
 
 void Logic::makeUnperfect()
 {
-	logicalState = aStar;
-	return;
 	std::cout << "Making maze unperfect\n";
 	// for randomization
 	std::random_device device;
