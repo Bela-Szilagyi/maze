@@ -99,13 +99,14 @@ void Logic::createMaze()
 			logicalState = closeWindow;
 			return;
 		}
-		std::cout << "carving\n";
+		//std::cout << "carving\n";
 	} while (!(maze.unvisitedNeighbors.empty() && maze.stack.empty())); //2. While there are unvisited cells
 	logicalState = makeMazeUnperfect;
 }
 
 void Logic::makeUnperfect()
 {
+	display.showMaze(maze, maze.root);
 	std::cout << "Making maze unperfect\n";
 	// for randomization
 	std::random_device device;
@@ -121,7 +122,7 @@ void Logic::makeUnperfect()
 			//	decide if remove randomly
 			std::uniform_int_distribution<int> distribution(1, 10);
 			int randomNumber = distribution(generator);
-			if (randomNumber > 7)
+			//if (randomNumber > 7)
 			{
 				std::vector< std::shared_ptr<Cell> > neighbors;
 				if (cell->nWall && cell->nNeighbor) neighbors.push_back(cell->nNeighbor);
@@ -132,8 +133,8 @@ void Logic::makeUnperfect()
 				int randomWall = distribution(generator);
 				std::shared_ptr<Cell> neighbor = neighbors[randomWall];
 				maze.removeWall(cell, neighbor);
-				SDL_Delay(500);
-				display.showMaze(maze, cell);
+				//SDL_Delay(500);
+				//display.showMaze(maze, cell);
 				/*//	if remove: remove a random wall which is not an outside wall
 				std::vector<Walls> walls{};
 				cell->getInnerWalls(walls);
@@ -156,12 +157,13 @@ void Logic::makeUnperfect()
 		}
 	}
 	std::cout << "Making maze unperfect done\n";
+	display.showMaze(maze, maze.root);
 	logicalState = aStar;
 }
 
 void Logic::run()
 {
-	Display::printMaze(maze);
+	//Display::printMaze(maze);
 	display.init();
 	Logic::logicalState = create;
 	bool quit = false;
@@ -184,14 +186,14 @@ void Logic::run()
 
 void Logic::AStarSolveMaze()
 {
-	ARobot aRobot(maze);
+	ARobot aRobot(maze, display);
 	std::vector< std::shared_ptr<Cell> > path = aRobot.solveMaze();
 
 	std::cout << "Path size: " << path.size() << '\n';
 
 	for (auto& cella : path) {
 		display.showMaze(maze, cella);
-		SDL_Delay(200);
+		//SDL_Delay(200);
 	}
 
 	logicalState = LogicalState::systemPause;

@@ -3,12 +3,16 @@
 struct cellCompare {
 	bool operator()(const std::shared_ptr<Cell> first, const std::shared_ptr<Cell> second) const
 	{
-		return first->fScore < second->fScore;
+		if (first->fScore < second->fScore) return true;
+		else if (first->fScore > second->fScore) return false;
+		else if (first->gScore < second->gScore) return true;
+		else if (first->gScore > second->gScore) return false;
+		else return first->value > second->value;
 	}
 } setObject;
 
 
-ARobot::ARobot(Maze & maze) : maze(maze)
+ARobot::ARobot(Maze & maze, Display & display) : maze(maze), display(display)
 {
 	actCell = (maze.root);
 	std::cout << "aRobot created, root's eWall is " << maze.root->eWall << " sWall is " << maze.root->sWall << '\n';
@@ -29,11 +33,12 @@ std::vector< std::shared_ptr<Cell> > ARobot::solveMaze()
 	std::shared_ptr<Cell> start = actCell;
 	int indexOfLastElement = maze.width * maze.height - 1;
 	std::shared_ptr<Cell> goal = maze.cells[indexOfLastElement];
-	//std::multiset< std::shared_ptr<Cell> > closedSet;
-	std::vector< std::shared_ptr<Cell> > closedSet;
-	//std::multiset< std::shared_ptr<Cell>, cellCompare > openSet;
-	std::vector< std::shared_ptr<Cell> > openSet;
-	openSet.push_back(start);
+	std::set< std::shared_ptr<Cell> > closedSet;
+	//std::vector< std::shared_ptr<Cell> > closedSet;
+	std::set< std::shared_ptr<Cell>, cellCompare > openSet;
+	//std::vector< std::shared_ptr<Cell> > openSet;
+	//openSet.push_back(start);
+	openSet.insert(start);
 	std::map< std::shared_ptr<Cell>, std::shared_ptr<Cell> > cameFrom;
 	
 	std::map < std::shared_ptr<Cell>, unsigned int > gScore;
@@ -58,18 +63,21 @@ std::vector< std::shared_ptr<Cell> > ARobot::solveMaze()
 
 		//std::cout << "openSet (" << openSet.size() << "): "; for (auto & item : openSet) std::cout << item->value << ' ';
 		//std::cout << "\nclosedSet (" << closedSet.size() << "): "; for (auto & item : closedSet) std::cout << item->value << ' '; std::cout << '\n';
-		std::sort(openSet.begin(), openSet.end(), setObject);
+		//std::sort(openSet.begin(), openSet.end(), setObject);
 		current = *openSet.begin();
+		//display.showMaze(maze, current);
 		//std::cout << "current: " << current->value << '\n';
 		if (current == goal) {
 			return reconstructPath(cameFrom, current);
 		}
 		//std::cout << "erasing: " << current->value << " from openSet\n";
-		openSet.erase(openSet.begin()); // current
+		//openSet.erase(openSet.begin()); // current
+		openSet.erase(current);
 		//std::cout << "\topenSet (" << openSet.size() << "): "; for (auto & item : openSet) std::cout << item->value << ' ';
 		//std::cout << '\n';
 		//std::cout << "inserting: " << current->value << " to closedSet\n";
-		closedSet.push_back(current);
+		//closedSet.push_back(current);
+		closedSet.insert(current);
 		//std::cout << "\tclosedSet (" << closedSet.size() << "): "; for (auto & item : closedSet) std::cout << item->value << ' ';
 		//std::cout << '\n';
 
@@ -81,22 +89,25 @@ std::vector< std::shared_ptr<Cell> > ARobot::solveMaze()
 			if (i == 3 && !current->wWall) neighbor = current->wNeighbor;
 			if (neighbor) {
 				//std::cout << "i: " << i << " neighbor: " << neighbor->value << '\n';
-				if (std::find(closedSet.begin(), closedSet.end(), neighbor) != closedSet.end())
+				//if (std::find(closedSet.begin(), closedSet.end(), neighbor) != closedSet.end())
+				if (closedSet.find(neighbor) != closedSet.end()) 
 				{
 					//std::cout << "\tneighbor in closedSet: " << neighbor->value << '\n';
 					continue;
 				}
-				//if (openSet.find(neighbor) == openSet.end()) 
-				if (std::find(openSet.begin(), openSet.end(), neighbor) == openSet.end())
+				//if (std::find(openSet.begin(), openSet.end(), neighbor) == openSet.end())
+				if (openSet.find(neighbor) == openSet.end()) 
 				{
 					//std::cout << "\tinserting neighbor to openSet: " << neighbor->value << '\n';
-					openSet.push_back(neighbor);
+					//openSet.push_back(neighbor);
+					openSet.insert(neighbor);
 					//std::cout << "\topenSet (" << openSet.size() << "): "; for (auto & item : openSet) std::cout << item->value << ' ';
 					//std::cout << '\n';
 				}
 				auto tentativeGScore = gScore[current] + 1;
 				if (tentativeGScore >= gScore[neighbor]) continue;
 				cameFrom[neighbor] = current;
+				// for (auto& c : cameFrom) { display.showMaze(maze, c.second); }
 				gScore[neighbor] = tentativeGScore;
 				// check if gScore.... should be removed
 				// fScore[neighbor] = gScore[neighbor] + heuristicCostEstimate(gScore[neighbor], neighbor, goal);
