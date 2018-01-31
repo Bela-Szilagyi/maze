@@ -129,5 +129,6 @@ std::vector< std::shared_ptr<Cell> > ARobot::reconstructPath(std::map< std::shar
 		current = cameFrom[current];
 		totalPath.push_back(current);
 	}
+	std::reverse(std::begin(totalPath), std::end(totalPath));
 	return totalPath;
 }

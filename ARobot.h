@@ -6,6 +6,7 @@
 #include <cstdlib>
 #include <algorithm>
 
+
 class ARobot :	public Robot
 {
 public:

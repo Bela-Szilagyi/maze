@@ -94,7 +94,7 @@ void Logic::createMaze()
 	do
 	{
 		currCell = maze.carve(currCell);
-		display.showMaze(maze, currCell);
+		//display.showMaze(maze, currCell);
 		if (SDL_PollEvent(&SDL_event) != 0 && SDL_event.type == SDL_QUIT) {
 			logicalState = closeWindow;
 			return;
@@ -132,7 +132,8 @@ void Logic::makeUnperfect()
 				int randomWall = distribution(generator);
 				std::shared_ptr<Cell> neighbor = neighbors[randomWall];
 				maze.removeWall(cell, neighbor);
-
+				SDL_Delay(500);
+				display.showMaze(maze, cell);
 				/*//	if remove: remove a random wall which is not an outside wall
 				std::vector<Walls> walls{};
 				cell->getInnerWalls(walls);
@@ -148,7 +149,7 @@ void Logic::makeUnperfect()
 			}
 		}
 		
-		display.showMaze(maze, cell);
+		//display.showMaze(maze, cell);
 		if (SDL_PollEvent(&SDL_event) != 0 && SDL_event.type == SDL_QUIT) {
 			logicalState = closeWindow;
 			return;

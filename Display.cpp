@@ -95,7 +95,7 @@ void Display::showMaze(const Maze &m, const std::shared_ptr<Cell> currCell)
 	SDL_RenderClear(renderer);	
 	int xOffset = 10;
 	int yOffset = 10;
-	int cellSize = 40;
+	int cellSize = 1300/m.width < 700/m.height ? 1300 / m.width : 700 / m.height;
 	std::shared_ptr<Cell> actCell = m.root;
 	std::shared_ptr<Cell> firstInRow = actCell;
 	for (int row = 0; row < m.height; ++row)
@@ -119,13 +119,17 @@ void Display::showMaze(const Maze &m, const std::shared_ptr<Cell> currCell)
 			if (actCell == currCell) SDL_SetRenderDrawColor(renderer, 155, 193, 188, SDL_ALPHA_OPAQUE); //camridge blue
 			//else if isPppped -> purple
 			//else if (actCell->isPopped) SDL_SetRenderDrawColor(renderer, 255, 0, 255, SDL_ALPHA_OPAQUE); //purple
-			else if (actCell->isPopped) SDL_SetRenderDrawColor(renderer, 92, 164, 169, SDL_ALPHA_OPAQUE); //cadet blue
+			else if (actCell->numOfAllWalls() == 3) SDL_SetRenderDrawColor(renderer, 230, 235, 224, SDL_ALPHA_OPAQUE); //platinum -> dead end
+			else SDL_SetRenderDrawColor(renderer, 92, 164, 169, SDL_ALPHA_OPAQUE); //cadet blue
 			// else if it is visited -> yellow
 			//else if (actCell->isVisited) SDL_SetRenderDrawColor(renderer, 255, 255, 0, SDL_ALPHA_OPAQUE); //yellow -> dead end
-			else if (actCell->isVisited) SDL_SetRenderDrawColor(renderer, 230, 235, 224, SDL_ALPHA_OPAQUE); //platinum -> dead end
+			
+			//else if (actCell->isVisited) SDL_SetRenderDrawColor(renderer, 230, 235, 224, SDL_ALPHA_OPAQUE); //platinum -> dead end
+			
 			// else -> blue
 			//else SDL_SetRenderDrawColor(renderer, 0, 0, 255, SDL_ALPHA_OPAQUE); //blue
-			else SDL_SetRenderDrawColor(renderer, 244, 241, 187, SDL_ALPHA_OPAQUE); //blond
+			
+			//else SDL_SetRenderDrawColor(renderer, 244, 241, 187, SDL_ALPHA_OPAQUE); //blond
 			//SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE); //black
 			
 			
