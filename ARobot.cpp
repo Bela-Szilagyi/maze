@@ -7,7 +7,7 @@ struct cellCompare {
 		else if (first->fScore > second->fScore) return false;
 		else if (first->gScore < second->gScore) return true;
 		else if (first->gScore > second->gScore) return false;
-		else return first->value > second->value;
+		else return first->value < second->value;
 	}
 } setObject;
 
