@@ -123,7 +123,17 @@ void Logic::makeUnperfect()
 			int randomNumber = distribution(generator);
 			if (randomNumber > 7)
 			{
-				//	if remove: remove a random wall which is not an outside wall
+				std::vector< std::shared_ptr<Cell> > neighbors;
+				if (cell->nWall && cell->nNeighbor) neighbors.push_back(cell->nNeighbor);
+				if (cell->eWall && cell->eNeighbor) neighbors.push_back(cell->eNeighbor);
+				if (cell->sWall && cell->sNeighbor) neighbors.push_back(cell->sNeighbor);
+				if (cell->wWall && cell->wNeighbor) neighbors.push_back(cell->wNeighbor);
+				std::uniform_int_distribution<int> distribution(0, neighbors.size() - 1);
+				int randomWall = distribution(generator);
+				std::shared_ptr<Cell> neighbor = neighbors[randomWall];
+				maze.removeWall(cell, neighbor);
+
+				/*//	if remove: remove a random wall which is not an outside wall
 				std::vector<Walls> walls{};
 				cell->getInnerWalls(walls);
 				std::uniform_int_distribution<int> distribution(0, walls.size() - 1);
@@ -134,6 +144,7 @@ void Logic::makeUnperfect()
 				if (walls[randomWall] == Walls::south) neighbor = cell->sNeighbor;
 				if (walls[randomWall] == Walls::west) neighbor = cell->wNeighbor;
 				maze.removeWall(cell, neighbor);
+				*/
 			}
 		}
 		
@@ -164,7 +175,7 @@ void Logic::run()
 		//{
 			// quit = handleEvents(SDL_event);
 			doLogic();
-			quit = true;
+			//quit = true;
 			while (timePassed + timeStep > SDL_GetTicks()) SDL_Delay(0);
 		//}
 	}
