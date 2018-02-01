@@ -80,9 +80,16 @@ bool Logic::popup()
 
 void Logic::doLogic()
 {
+	display.showMaze(maze, maze.root);
+	//SDL_Delay(2000);
 	if (logicalState == create) createMaze();
 	else if (logicalState == makeMazeUnperfect) makeUnperfect();
 	else if (logicalState == aStar) AStarSolveMaze(); //std::cout << "AStar algo begins\n";
+	else if (logicalState == systemPause) { 
+		display.showMaze(maze, maze.root);
+		std::cout << &display << std::endl;
+		//std::cout << "test" << std::endl;
+	}//AStarSolveMaze();
 	else if (logicalState == closeWindow) return;
 }
 
@@ -165,7 +172,7 @@ void Logic::run()
 {
 	//Display::printMaze(maze);
 	display.init();
-	Logic::logicalState = create;
+	logicalState = create;
 	bool quit = false;
 	Uint32 timePassed = 0;
 	Uint32 timeStep = 16;
@@ -186,15 +193,22 @@ void Logic::run()
 
 void Logic::AStarSolveMaze()
 {
-	ARobot aRobot(maze, display);
-	std::vector< std::shared_ptr<Cell> > path = aRobot.solveMaze();
+	ARobot aRobot(maze);
+	static std::vector< std::shared_ptr<Cell> > path = aRobot.solveMaze();
 
 	std::cout << "Path size: " << path.size() << '\n';
-
+	SDL_Event SDL_event;
+	
 	for (auto& cella : path) {
 		display.showMaze(maze, cella);
+		if (SDL_PollEvent(&SDL_event) != 0 && SDL_event.type == SDL_QUIT) {
+			logicalState = closeWindow;
+			return;
+		}
 		//SDL_Delay(200);
 	}
-
-	logicalState = LogicalState::systemPause;
+	//while(true) display.showMaze(maze, maze.root);
+	std::cout << "Is display alive?" << std::endl;
+	std::cout << &display << std::endl;
+	logicalState = systemPause;
 }

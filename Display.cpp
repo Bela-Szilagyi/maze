@@ -159,6 +159,7 @@ void Display::showMaze(const Maze &m, const std::shared_ptr<Cell> currCell)
 }
 
 Display::~Display() {
+	std::cout << "display object was destroyed";
 	if (renderer) SDL_DestroyRenderer(renderer);
 	if (window) SDL_DestroyWindow(window);
 	//IMG_Quit();

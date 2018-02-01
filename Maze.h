@@ -15,7 +15,6 @@ public:
 	int height;
 	int width;
 
-	
 	std::vector< std::shared_ptr<Cell> > unvisitedNeighbors;
 	std::vector< std::shared_ptr<Cell> > stack;
 	int step = 0;

@@ -12,7 +12,7 @@ struct cellCompare {
 } setObject;
 
 
-ARobot::ARobot(Maze & maze, Display & display) : maze(maze), display(display)
+ARobot::ARobot(Maze & maze) : maze(maze)
 {
 	actCell = (maze.root);
 	std::cout << "aRobot created, root's eWall is " << maze.root->eWall << " sWall is " << maze.root->sWall << '\n';

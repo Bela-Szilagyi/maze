@@ -10,7 +10,7 @@
 class ARobot :	public Robot
 {
 public:
-	ARobot(Maze & maze, Display & display);
+	ARobot(Maze & maze);
 	ARobot();
 	~ARobot();
 	virtual std::vector< std::shared_ptr<Cell> > solveMaze() override;
