@@ -87,7 +87,7 @@ void Logic::doLogic()
 	else if (logicalState == aStar) AStarSolveMaze(); //std::cout << "AStar algo begins\n";
 	else if (logicalState == systemPause) { 
 		display.showMaze(maze, maze.root);
-		std::cout << &display << std::endl;
+		//std::cout << &display << std::endl;
 		//std::cout << "test" << std::endl;
 	}//AStarSolveMaze();
 	else if (logicalState == closeWindow) return;
@@ -168,6 +168,28 @@ void Logic::makeUnperfect()
 	logicalState = aStar;
 }
 
+void Logic::AStarSolveMaze()
+{
+	ARobot aRobot(maze);
+	std::vector< std::shared_ptr<Cell> > path = aRobot.solveMaze();
+
+	std::cout << "Path size: " << path.size() << '\n';
+	SDL_Event SDL_event;
+
+	for (auto& cella : path) {
+		display.showMaze(maze, cella);
+		if (SDL_PollEvent(&SDL_event) != 0 && SDL_event.type == SDL_QUIT) {
+			logicalState = closeWindow;
+			return;
+		}
+		//SDL_Delay(200);
+	}
+	//while(true) display.showMaze(maze, maze.root);
+	std::cout << "Is display alive?" << std::endl;
+	//std::cout << &display << std::endl;
+	logicalState = systemPause;
+}
+
 void Logic::run()
 {
 	//Display::printMaze(maze);
@@ -189,26 +211,4 @@ void Logic::run()
 		//}
 	}
 	//system("pause");
-}
-
-void Logic::AStarSolveMaze()
-{
-	ARobot aRobot(maze);
-	static std::vector< std::shared_ptr<Cell> > path = aRobot.solveMaze();
-
-	std::cout << "Path size: " << path.size() << '\n';
-	SDL_Event SDL_event;
-	
-	for (auto& cella : path) {
-		display.showMaze(maze, cella);
-		if (SDL_PollEvent(&SDL_event) != 0 && SDL_event.type == SDL_QUIT) {
-			logicalState = closeWindow;
-			return;
-		}
-		//SDL_Delay(200);
-	}
-	//while(true) display.showMaze(maze, maze.root);
-	std::cout << "Is display alive?" << std::endl;
-	std::cout << &display << std::endl;
-	logicalState = systemPause;
 }
