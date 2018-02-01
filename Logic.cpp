@@ -78,19 +78,31 @@ bool Logic::popup()
 }
 
 
-void Logic::doLogic()
+bool Logic::doLogic()
 {
 	//display.showMaze(maze, maze.root);
 	//SDL_Delay(2000);
-	if (logicalState == create) createMaze();
-	else if (logicalState == makeMazeUnperfect) makeUnperfect();
-	else if (logicalState == aStar) AStarSolveMaze(); //std::cout << "AStar algo begins\n";
+	if (logicalState == create)
+	{
+		createMaze();
+		return false;
+	}
+	else if (logicalState == makeMazeUnperfect)
+	{
+		makeUnperfect();
+		return false;
+	}
+	else if (logicalState == aStar)
+	{
+		AStarSolveMaze(); //std::cout << "AStar algo begins\n";
+		return false;
+	}
+
 	else if (logicalState == systemPause) { 
 		pauseSystem();
-		//std::cout << &display << std::endl;
-		//std::cout << "test" << std::endl;
-	}//AStarSolveMaze();
-	else if (logicalState == closeWindow) return;
+		return false;
+	}
+	else if (logicalState == closeWindow) return true;
 }
 
 void Logic::createMaze()
@@ -217,7 +229,7 @@ void Logic::run()
 		// while (SDL_PollEvent(&SDL_event) != 0)
 		//{
 			// quit = handleEvents(SDL_event);
-			doLogic();
+			quit = doLogic();
 			//quit = true;
 			while (timePassed + timeStep > SDL_GetTicks()) SDL_Delay(0);
 		//}

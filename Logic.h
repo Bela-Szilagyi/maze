@@ -25,7 +25,7 @@ public:
 	Logic(int height, int width);
 	~Logic();
 	void run();
-	void doLogic();
+	bool doLogic();
 	void createMaze();
 	void makeUnperfect();
 	void AStarSolveMaze();
