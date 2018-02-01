@@ -11,7 +11,6 @@ public:
 	Maze(int, int);
 	Maze() = default;
 	std::shared_ptr<Cell> root;
-	//Display display;
 	std::shared_ptr<Cell> carve(std::shared_ptr<Cell> currCell);
 	int height;
 	int width;
