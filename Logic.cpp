@@ -80,13 +80,13 @@ bool Logic::popup()
 
 void Logic::doLogic()
 {
-	display.showMaze(maze, maze.root);
+	//display.showMaze(maze, maze.root);
 	//SDL_Delay(2000);
 	if (logicalState == create) createMaze();
 	else if (logicalState == makeMazeUnperfect) makeUnperfect();
 	else if (logicalState == aStar) AStarSolveMaze(); //std::cout << "AStar algo begins\n";
 	else if (logicalState == systemPause) { 
-		display.showMaze(maze, maze.root);
+		pauseSystem();
 		//std::cout << &display << std::endl;
 		//std::cout << "test" << std::endl;
 	}//AStarSolveMaze();
@@ -101,7 +101,7 @@ void Logic::createMaze()
 	do
 	{
 		currCell = maze.carve(currCell);
-		//display.showMaze(maze, currCell);
+		display.showMaze(maze, currCell);
 		if (SDL_PollEvent(&SDL_event) != 0 && SDL_event.type == SDL_QUIT) {
 			logicalState = closeWindow;
 			return;
@@ -185,10 +185,22 @@ void Logic::AStarSolveMaze()
 		//SDL_Delay(200);
 	}
 	//while(true) display.showMaze(maze, maze.root);
-	std::cout << "Is display alive?" << std::endl;
+	//std::cout << "Is display alive?" << std::endl;
 	//std::cout << &display << std::endl;
 	logicalState = systemPause;
+
 }
+
+void Logic::pauseSystem()
+{
+	SDL_Event SDL_event;
+	//display.showMaze(maze, maze.root);
+	if (SDL_PollEvent(&SDL_event) != 0 && SDL_event.type == SDL_QUIT) {
+		logicalState = closeWindow;
+		return;
+	}
+}
+
 
 void Logic::run()
 {
