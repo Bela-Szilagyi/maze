@@ -19,6 +19,5 @@ private:
 	Maze maze;
 	unsigned int heuristicCostEstimate(unsigned int gValue, std::shared_ptr<Cell> start, std::shared_ptr<Cell> goal);
 	std::vector< std::shared_ptr<Cell> > reconstructPath(std::map< std::shared_ptr<Cell>, std::shared_ptr<Cell> > cameFrom, std::shared_ptr<Cell> current);
-	//Display display;
 };
 

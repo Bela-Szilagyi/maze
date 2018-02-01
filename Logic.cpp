@@ -113,7 +113,7 @@ void Logic::createMaze()
 	do
 	{
 		currCell = maze.carve(currCell);
-		display.showMaze(maze, currCell);
+		//display.showMaze(maze, currCell);
 		if (SDL_PollEvent(&SDL_event) != 0 && SDL_event.type == SDL_QUIT) {
 			logicalState = closeWindow;
 			return;
@@ -152,20 +152,6 @@ void Logic::makeUnperfect()
 				int randomWall = distribution(generator);
 				std::shared_ptr<Cell> neighbor = neighbors[randomWall];
 				maze.removeWall(cell, neighbor);
-				//SDL_Delay(500);
-				//display.showMaze(maze, cell);
-				/*//	if remove: remove a random wall which is not an outside wall
-				std::vector<Walls> walls{};
-				cell->getInnerWalls(walls);
-				std::uniform_int_distribution<int> distribution(0, walls.size() - 1);
-				int randomWall = distribution(generator);
-				std::shared_ptr<Cell> neighbor;
-				if (walls[randomWall] == Walls::north) neighbor = cell->nNeighbor;
-				if (walls[randomWall] == Walls::east) neighbor = cell->eNeighbor;
-				if (walls[randomWall] == Walls::south) neighbor = cell->sNeighbor;
-				if (walls[randomWall] == Walls::west) neighbor = cell->wNeighbor;
-				maze.removeWall(cell, neighbor);
-				*/
 			}
 		}
 		
@@ -188,7 +174,8 @@ void Logic::AStarSolveMaze()
 	std::cout << "Path size: " << path.size() << '\n';
 	SDL_Event SDL_event;
 
-	for (auto& cella : path) {
+	for (auto cella : path) {
+		cella->isInAStarPath = true;
 		display.showMaze(maze, cella);
 		if (SDL_PollEvent(&SDL_event) != 0 && SDL_event.type == SDL_QUIT) {
 			logicalState = closeWindow;
@@ -196,9 +183,6 @@ void Logic::AStarSolveMaze()
 		}
 		//SDL_Delay(200);
 	}
-	//while(true) display.showMaze(maze, maze.root);
-	//std::cout << "Is display alive?" << std::endl;
-	//std::cout << &display << std::endl;
 	logicalState = systemPause;
 
 }
@@ -206,7 +190,7 @@ void Logic::AStarSolveMaze()
 void Logic::pauseSystem()
 {
 	SDL_Event SDL_event;
-	//display.showMaze(maze, maze.root);
+	display.showMaze(maze, maze.root);
 	if (SDL_PollEvent(&SDL_event) != 0 && SDL_event.type == SDL_QUIT) {
 		logicalState = closeWindow;
 		return;

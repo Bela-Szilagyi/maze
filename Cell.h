@@ -14,7 +14,7 @@ enum Walls
 class Cell
 {
 public:
-	Cell(int v) : value(v) {};
+	Cell(int v) : value(v), isInAStarPath(false) {};
 	bool nWall = true;
 	bool eWall = true;
 	bool sWall = true;
@@ -27,6 +27,7 @@ public:
 	int value;
 	bool isVisited = false;
 	bool isPopped = false;
+	bool isInAStarPath;
 
 	int numOfInnerWalls();
 	int numOfAllWalls();

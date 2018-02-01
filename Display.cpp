@@ -101,6 +101,7 @@ void Display::showMaze(const Maze &m, const std::shared_ptr<Cell> currCell)
 	for (int row = 0; row < m.height; ++row)
 	{
 		actCell = firstInRow;
+		std::cout << actCell->isInAStarPath << '\n';
 		for (int column = 0; column < m.width; ++column)
 		{
 			//std::cout << actCell->value << '\n';
@@ -119,8 +120,10 @@ void Display::showMaze(const Maze &m, const std::shared_ptr<Cell> currCell)
 			if (actCell == currCell) SDL_SetRenderDrawColor(renderer, 155, 193, 188, SDL_ALPHA_OPAQUE); //camridge blue
 			//else if isPppped -> purple
 			//else if (actCell->isPopped) SDL_SetRenderDrawColor(renderer, 255, 0, 255, SDL_ALPHA_OPAQUE); //purple
+			else if (actCell->isInAStarPath) SDL_SetRenderDrawColor(renderer, 255, 255, 0, SDL_ALPHA_OPAQUE); //yellow -> is in AStarPath
 			else if (actCell->numOfAllWalls() == 3) SDL_SetRenderDrawColor(renderer, 230, 235, 224, SDL_ALPHA_OPAQUE); //platinum -> dead end
 			else SDL_SetRenderDrawColor(renderer, 92, 164, 169, SDL_ALPHA_OPAQUE); //cadet blue
+			//SDL_SetRenderDrawColor(renderer, 92, 164, 169, SDL_ALPHA_OPAQUE);
 			// else if it is visited -> yellow
 			//else if (actCell->isVisited) SDL_SetRenderDrawColor(renderer, 255, 255, 0, SDL_ALPHA_OPAQUE); //yellow -> dead end
 			
