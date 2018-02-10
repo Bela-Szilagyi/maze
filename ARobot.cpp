@@ -95,6 +95,9 @@ unsigned int ARobot::heuristicCostEstimate(unsigned int gValue, std::shared_ptr<
 {
 	// using Manhattan distance for hValue
 	unsigned int hValue = std::abs((int) start->col - (int) goal->col) + std::abs((int) start->row - (int) goal->row);
+	
+	// 2D distance for hValue
+	//unsigned int hValue = std::sqrt(std::pow((int)start->col - (int)goal->col, 2) + std::pow((int)start->row - (int)goal->row, 2));
 	unsigned int fValue = gValue + hValue;
 	return fValue;
 }

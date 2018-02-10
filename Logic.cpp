@@ -109,7 +109,7 @@ void Logic::createMaze()
 {
 	std::shared_ptr<Cell> currCell = maze.root; //1. Make the initial cell the current cell
 												//currCell->isVisited = true;	//and mark it as visited
-	SDL_Event SDL_event;
+	/*SDL_Event SDL_event;
 	do
 	{
 		currCell = maze.carve(currCell);
@@ -120,7 +120,38 @@ void Logic::createMaze()
 		}
 		//std::cout << "carving\n";
 	} while (!(maze.unvisitedNeighbors.empty() && maze.stack.empty())); //2. While there are unvisited cells
-	logicalState = makeMazeUnperfect;
+	
+	*/
+	maze.removeWall(currCell, currCell->sNeighbor);
+	currCell = currCell->eNeighbor;
+	maze.removeWall(currCell, currCell->sNeighbor);
+	maze.removeWall(currCell, currCell->eNeighbor);
+	currCell = currCell->eNeighbor;
+	maze.removeWall(currCell, currCell->eNeighbor);
+	currCell = currCell->eNeighbor;
+	maze.removeWall(currCell, currCell->eNeighbor);
+	currCell = currCell->eNeighbor;
+	maze.removeWall(currCell, currCell->sNeighbor);
+	currCell = currCell->sNeighbor;
+	maze.removeWall(currCell, currCell->sNeighbor);
+	maze.removeWall(currCell, currCell->wNeighbor);
+	currCell = currCell->wNeighbor;
+	maze.removeWall(currCell, currCell->wNeighbor);
+	currCell = currCell->wNeighbor;
+	maze.removeWall(currCell, currCell->sNeighbor);
+	currCell = currCell->wNeighbor;
+	maze.removeWall(currCell, currCell->sNeighbor);
+	currCell = currCell->wNeighbor;
+	maze.removeWall(currCell, currCell->sNeighbor);
+	currCell = currCell->sNeighbor;
+	maze.removeWall(currCell, currCell->eNeighbor);
+	currCell = currCell->eNeighbor;
+	maze.removeWall(currCell, currCell->eNeighbor);
+
+	//logicalState = makeMazeUnperfect;
+	//
+
+	logicalState = aStar;
 }
 
 void Logic::makeUnperfect()
@@ -174,7 +205,7 @@ void Logic::AStarSolveMaze()
 	std::cout << "Path size: " << path.size() << '\n';
 	SDL_Event SDL_event;
 
-	for (auto cella : path) {
+	for (auto& cella : path) {
 		cella->isInAStarPath = true;
 		display.showMaze(maze, cella);
 		if (SDL_PollEvent(&SDL_event) != 0 && SDL_event.type == SDL_QUIT) {

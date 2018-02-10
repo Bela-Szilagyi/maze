@@ -101,7 +101,7 @@ void Display::showMaze(const Maze &m, const std::shared_ptr<Cell> currCell)
 	for (int row = 0; row < m.height; ++row)
 	{
 		actCell = firstInRow;
-		std::cout << actCell->isInAStarPath << '\n';
+		//std::cout << actCell->isInAStarPath << '\n';
 		for (int column = 0; column < m.width; ++column)
 		{
 			//std::cout << actCell->value << '\n';
