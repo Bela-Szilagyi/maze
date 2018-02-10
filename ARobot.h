@@ -16,6 +16,7 @@ public:
 	~ARobot();
 	virtual std::vector< std::shared_ptr<Cell> > solveMaze() override;
 	void getInfo();
+	std::shared_ptr<Cell> getLF(std::vector<std::shared_ptr<Cell>> openSet);
 private:
 	Maze maze;
 	unsigned int heuristicCostEstimate(unsigned int gValue, std::shared_ptr<Cell> start, std::shared_ptr<Cell> goal);

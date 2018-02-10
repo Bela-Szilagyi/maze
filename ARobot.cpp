@@ -1,5 +1,6 @@
 #include "ARobot.h"
 
+
 struct cellCompare {
 	bool operator()(const std::shared_ptr<Cell> first, const std::shared_ptr<Cell> second) const
 	{
@@ -12,6 +13,7 @@ struct cellCompare {
 		*/
 	}
 } setObject;
+
 
 
 ARobot::ARobot(Maze & maze) : maze(maze)
@@ -34,9 +36,12 @@ std::vector< std::shared_ptr<Cell> > ARobot::solveMaze()
 	std::shared_ptr<Cell> start = actCell;
 	int indexOfLastElement = maze.width * maze.height - 1;
 	std::shared_ptr<Cell> goal = maze.cells[indexOfLastElement];
-	std::set< std::shared_ptr<Cell> > closedSet;
-	std::set< std::shared_ptr<Cell>, cellCompare > openSet;
-	openSet.insert(start);
+	//std::set< std::shared_ptr<Cell> > closedSet;
+	std::vector< std::shared_ptr<Cell>> closedSet;
+	//std::set< std::shared_ptr<Cell>, cellCompare > openSet;
+	std::vector< std::shared_ptr<Cell>> openSet;
+	//openSet.insert(start);
+	openSet.push_back(start);
 	std::map< std::shared_ptr<Cell>, std::shared_ptr<Cell> > cameFrom;
 	
 	std::map < std::shared_ptr<Cell>, unsigned int > gScore;
@@ -57,14 +62,22 @@ std::vector< std::shared_ptr<Cell> > ARobot::solveMaze()
 	
 	std::shared_ptr<Cell> current = nullptr;
 
+	std::cout << std::endl << openSet[0]->value << std::endl;
+
+	
 	while (!openSet.empty()) {
-		current = *openSet.begin();
+		//current = *openSet.begin();
+		//current = openSet[0];
+		current = getLF(openSet);
 		std::cout << "Current value: " << current->value << "Current fscore: " << current->fScore;
 		if (current == goal) {
 			return reconstructPath(cameFrom, current);
 		}
-		openSet.erase(current);
-		closedSet.insert(current);
+		//openSet.erase(current);
+		//vec.erase(std::remove(vec.begin(), vec.end(), 8), vec.end());
+		openSet.erase(remove(openSet.begin(), openSet.end(), current), openSet.end());
+		//closedSet.insert(current);
+		closedSet.push_back(current);
 
 		for (int i = 0; i < 4; ++i) {
 			std::shared_ptr<Cell> neighbor = nullptr;
@@ -74,10 +87,13 @@ std::vector< std::shared_ptr<Cell> > ARobot::solveMaze()
 			if (i == 3 && !current->wWall) neighbor = current->wNeighbor;
 			if (neighbor) {
 				std::cout << " negighbour value: " << neighbor->value << " ";
-				if (closedSet.find(neighbor) != closedSet.end()) continue;
-				if (openSet.find(neighbor) == openSet.end()) 
+				//if (closedSet.find(neighbor) != closedSet.end()) continue;
+				if (std::find(closedSet.begin(), closedSet.end(), neighbor) != closedSet.end()) continue;
+				//if (openSet.find(neighbor) == openSet.end()) 
+				if (std::find(openSet.begin(), openSet.end(), neighbor) == openSet.end())
 				{
-					openSet.insert(neighbor);
+					//openSet.insert(neighbor);
+					openSet.push_back(neighbor);
 				}
 				auto tentativeGScore = gScore[current] + 1;
 				if (tentativeGScore >= gScore[neighbor]) continue;
@@ -89,7 +105,8 @@ std::vector< std::shared_ptr<Cell> > ARobot::solveMaze()
 			}
 		}
 		std::cout << std::endl;
-	}		
+	}	
+	
 	return path;
 }
 
@@ -121,4 +138,20 @@ std::vector< std::shared_ptr<Cell> > ARobot::reconstructPath(std::map< std::shar
 	}
 	std::reverse(std::begin(totalPath), std::end(totalPath));
 	return totalPath;
+}
+
+std::shared_ptr<Cell> ARobot::getLF(std::vector<std::shared_ptr<Cell>> openSet)
+
+{
+	std::shared_ptr<Cell> result = nullptr;
+	unsigned int minF = 0 - 1;
+	for (unsigned int i = 0; i < openSet.size(); ++i)
+	{
+		if (openSet[i]->fScore <= minF) {
+			result = openSet[i];
+			minF = openSet[i]->fScore;
+		}
+	}
+	
+	return result;
 }
