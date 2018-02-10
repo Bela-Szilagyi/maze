@@ -3,11 +3,13 @@
 struct cellCompare {
 	bool operator()(const std::shared_ptr<Cell> first, const std::shared_ptr<Cell> second) const
 	{
-		if (first->fScore < second->fScore) return true;
+		return first->fScore == second->fScore ? first->value < second->value : first->fScore < second->fScore;
+		/*if (first->fScore < second->fScore) return true;
 		else if (first->fScore > second->fScore) return false;
 		else if (first->gScore < second->gScore) return true;
 		else if (first->gScore > second->gScore) return false;
 		else return first->value < second->value;
+		*/
 	}
 } setObject;
 
@@ -57,7 +59,7 @@ std::vector< std::shared_ptr<Cell> > ARobot::solveMaze()
 
 	while (!openSet.empty()) {
 		current = *openSet.begin();
-		std::cout << "Current value: " << current->value;
+		std::cout << "Current value: " << current->value << "Current fscore: " << current->fScore;
 		if (current == goal) {
 			return reconstructPath(cameFrom, current);
 		}
@@ -82,7 +84,8 @@ std::vector< std::shared_ptr<Cell> > ARobot::solveMaze()
 				cameFrom[neighbor] = current;
 				gScore[neighbor] = tentativeGScore;
 				fScore[neighbor] = heuristicCostEstimate(gScore[neighbor], neighbor, goal);
-				std::cout << " negighbour fscore: " << neighbor->value << fScore[neighbor] << "|";
+				neighbor->fScore = fScore[neighbor];
+				std::cout << " neighbour fscore: " << neighbor->fScore << "|";
 			}
 		}
 		std::cout << std::endl;
@@ -99,10 +102,11 @@ unsigned int ARobot::heuristicCostEstimate(unsigned int gValue, std::shared_ptr<
 {
 	// using Manhattan distance for hValue
 	unsigned int hValue = std::abs((int) start->col - (int) goal->col) + std::abs((int) start->row - (int) goal->row);
-	
+	std::cout << "H: " << hValue << ", ";
 	// 2D distance for hValue
 	//unsigned int hValue = std::sqrt(std::pow((int)start->col - (int)goal->col, 2) + std::pow((int)start->row - (int)goal->row, 2));
 	unsigned int fValue = gValue + hValue;
+	std::cout << "F: " << fValue << std::endl;
 	return fValue;
 }
 
