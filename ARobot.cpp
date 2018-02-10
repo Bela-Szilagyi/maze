@@ -57,6 +57,7 @@ std::vector< std::shared_ptr<Cell> > ARobot::solveMaze()
 
 	while (!openSet.empty()) {
 		current = *openSet.begin();
+		std::cout << "Current value: " << current->value;
 		if (current == goal) {
 			return reconstructPath(cameFrom, current);
 		}
@@ -70,6 +71,7 @@ std::vector< std::shared_ptr<Cell> > ARobot::solveMaze()
 			if (i == 2 && !current->sWall) neighbor = current->sNeighbor;
 			if (i == 3 && !current->wWall) neighbor = current->wNeighbor;
 			if (neighbor) {
+				std::cout << " negighbour value: " << neighbor->value << " ";
 				if (closedSet.find(neighbor) != closedSet.end()) continue;
 				if (openSet.find(neighbor) == openSet.end()) 
 				{
@@ -80,8 +82,10 @@ std::vector< std::shared_ptr<Cell> > ARobot::solveMaze()
 				cameFrom[neighbor] = current;
 				gScore[neighbor] = tentativeGScore;
 				fScore[neighbor] = heuristicCostEstimate(gScore[neighbor], neighbor, goal);
+				std::cout << " negighbour fscore: " << neighbor->value << fScore[neighbor] << "|";
 			}
 		}
+		std::cout << std::endl;
 	}		
 	return path;
 }

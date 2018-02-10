@@ -6,6 +6,7 @@
 #include <cstdlib>
 #include <algorithm>
 #include "Display.h"
+#include <iostream>
 
 class ARobot :	public Robot
 {
