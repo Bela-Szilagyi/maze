@@ -109,9 +109,11 @@ void Logic::createMaze()
 {
 	std::shared_ptr<Cell> currCell = maze.root; //1. Make the initial cell the current cell
 												//currCell->isVisited = true;	//and mark it as visited
-	/*SDL_Event SDL_event;
+	
+	SDL_Event SDL_event;
 	do
 	{
+
 		currCell = maze.carve(currCell);
 		//display.showMaze(maze, currCell);
 		if (SDL_PollEvent(&SDL_event) != 0 && SDL_event.type == SDL_QUIT) {
@@ -121,42 +123,42 @@ void Logic::createMaze()
 		//std::cout << "carving\n";
 	} while (!(maze.unvisitedNeighbors.empty() && maze.stack.empty())); //2. While there are unvisited cells
 	
+	/*
+	maze.removeWall(currCell, currCell->sNeighbor);
+	currCell = currCell->eNeighbor;
+	maze.removeWall(currCell, currCell->sNeighbor);
+	maze.removeWall(currCell, currCell->eNeighbor);
+	currCell = currCell->eNeighbor;
+	maze.removeWall(currCell, currCell->eNeighbor);
+	currCell = currCell->eNeighbor;
+	maze.removeWall(currCell, currCell->eNeighbor);
+	currCell = currCell->eNeighbor;
+	maze.removeWall(currCell, currCell->sNeighbor);
+	currCell = currCell->sNeighbor;
+	maze.removeWall(currCell, currCell->sNeighbor);
+	maze.removeWall(currCell, currCell->wNeighbor);
+	currCell = currCell->wNeighbor;
+	maze.removeWall(currCell, currCell->wNeighbor);
+	currCell = currCell->wNeighbor;
+	maze.removeWall(currCell, currCell->sNeighbor);
+	currCell = currCell->wNeighbor;
+	maze.removeWall(currCell, currCell->sNeighbor);
+	currCell = currCell->wNeighbor;
+	maze.removeWall(currCell, currCell->sNeighbor);
+	currCell = currCell->sNeighbor;
+	maze.removeWall(currCell, currCell->eNeighbor);
+	currCell = currCell->eNeighbor;
+	maze.removeWall(currCell, currCell->eNeighbor);
 	*/
-	maze.removeWall(currCell, currCell->sNeighbor);
-	currCell = currCell->eNeighbor;
-	maze.removeWall(currCell, currCell->sNeighbor);
-	maze.removeWall(currCell, currCell->eNeighbor);
-	currCell = currCell->eNeighbor;
-	maze.removeWall(currCell, currCell->eNeighbor);
-	currCell = currCell->eNeighbor;
-	maze.removeWall(currCell, currCell->eNeighbor);
-	currCell = currCell->eNeighbor;
-	maze.removeWall(currCell, currCell->sNeighbor);
-	currCell = currCell->sNeighbor;
-	maze.removeWall(currCell, currCell->sNeighbor);
-	maze.removeWall(currCell, currCell->wNeighbor);
-	currCell = currCell->wNeighbor;
-	maze.removeWall(currCell, currCell->wNeighbor);
-	currCell = currCell->wNeighbor;
-	maze.removeWall(currCell, currCell->sNeighbor);
-	currCell = currCell->wNeighbor;
-	maze.removeWall(currCell, currCell->sNeighbor);
-	currCell = currCell->wNeighbor;
-	maze.removeWall(currCell, currCell->sNeighbor);
-	currCell = currCell->sNeighbor;
-	maze.removeWall(currCell, currCell->eNeighbor);
-	currCell = currCell->eNeighbor;
-	maze.removeWall(currCell, currCell->eNeighbor);
+	logicalState = makeMazeUnperfect;
+	
 
-	//logicalState = makeMazeUnperfect;
-	//
-
-	logicalState = aStar;
+	//logicalState = aStar;
 }
 
 void Logic::makeUnperfect()
 {
-	display.showMaze(maze, maze.root);
+	display.showMaze(maze, nullptr);
 	std::cout << "Making maze unperfect\n";
 	// for randomization
 	std::random_device device;
@@ -193,7 +195,7 @@ void Logic::makeUnperfect()
 		}
 	}
 	std::cout << "Making maze unperfect done\n";
-	display.showMaze(maze, maze.root);
+	display.showMaze(maze, nullptr);
 	logicalState = aStar;
 }
 
@@ -221,7 +223,8 @@ void Logic::AStarSolveMaze()
 void Logic::pauseSystem()
 {
 	SDL_Event SDL_event;
-	display.showMaze(maze, maze.root);
+	//display.showMaze(maze, maze.root);
+	display.showMaze(maze, nullptr);
 	if (SDL_PollEvent(&SDL_event) != 0 && SDL_event.type == SDL_QUIT) {
 		logicalState = closeWindow;
 		return;

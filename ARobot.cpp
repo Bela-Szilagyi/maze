@@ -1,10 +1,13 @@
 #include "ARobot.h"
+#include <algorithm>
 
 
-struct cellCompare {
+struct cellCompare 
+{
 	bool operator()(const std::shared_ptr<Cell> first, const std::shared_ptr<Cell> second) const
 	{
-		return first->fScore == second->fScore ? first->value < second->value : first->fScore < second->fScore;
+		return first->fScore < second->fScore;
+		//return first->fScore == second->fScore ? first->value < second->value : first->fScore < second->fScore;
 		/*if (first->fScore < second->fScore) return true;
 		else if (first->fScore > second->fScore) return false;
 		else if (first->gScore < second->gScore) return true;
@@ -36,12 +39,12 @@ std::vector< std::shared_ptr<Cell> > ARobot::solveMaze()
 	std::shared_ptr<Cell> start = actCell;
 	int indexOfLastElement = maze.width * maze.height - 1;
 	std::shared_ptr<Cell> goal = maze.cells[indexOfLastElement];
-	//std::set< std::shared_ptr<Cell> > closedSet;
-	std::vector< std::shared_ptr<Cell>> closedSet;
-	//std::set< std::shared_ptr<Cell>, cellCompare > openSet;
-	std::vector< std::shared_ptr<Cell>> openSet;
-	//openSet.insert(start);
-	openSet.push_back(start);
+	std::multiset< std::shared_ptr<Cell> > closedSet;
+	//std::vector< std::shared_ptr<Cell>> closedSet;
+	std::multiset< std::shared_ptr<Cell>, cellCompare > openSet;
+	//std::vector< std::shared_ptr<Cell>> openSet;
+	openSet.insert(start);
+	//openSet.push_back(start);
 	std::map< std::shared_ptr<Cell>, std::shared_ptr<Cell> > cameFrom;
 	
 	std::map < std::shared_ptr<Cell>, unsigned int > gScore;
@@ -62,22 +65,23 @@ std::vector< std::shared_ptr<Cell> > ARobot::solveMaze()
 	
 	std::shared_ptr<Cell> current = nullptr;
 
-	std::cout << std::endl << openSet[0]->value << std::endl;
+	//std::cout << std::endl << openSet[0]->value << std::endl;
 
 	
 	while (!openSet.empty()) {
-		//current = *openSet.begin();
+		current = *openSet.begin();
 		//current = openSet[0];
-		current = getLF(openSet);
-		std::cout << "Current value: " << current->value << "Current fscore: " << current->fScore;
+		//current = getLF(openSet);
+		//std::cout << "Current value: " << current->value << ", Current fscore: " << current->fScore;
 		if (current == goal) {
 			return reconstructPath(cameFrom, current);
 		}
 		//openSet.erase(current);
 		//vec.erase(std::remove(vec.begin(), vec.end(), 8), vec.end());
-		openSet.erase(remove(openSet.begin(), openSet.end(), current), openSet.end());
-		//closedSet.insert(current);
-		closedSet.push_back(current);
+		//openSet.erase(remove(openSet.begin(), openSet.end(), current), openSet.end());
+		openSet.erase(openSet.begin());
+		closedSet.insert(current);
+		//closedSet.push_back(current);
 
 		for (int i = 0; i < 4; ++i) {
 			std::shared_ptr<Cell> neighbor = nullptr;
@@ -86,25 +90,31 @@ std::vector< std::shared_ptr<Cell> > ARobot::solveMaze()
 			if (i == 2 && !current->sWall) neighbor = current->sNeighbor;
 			if (i == 3 && !current->wWall) neighbor = current->wNeighbor;
 			if (neighbor) {
-				std::cout << " negighbour value: " << neighbor->value << " ";
-				//if (closedSet.find(neighbor) != closedSet.end()) continue;
-				if (std::find(closedSet.begin(), closedSet.end(), neighbor) != closedSet.end()) continue;
-				//if (openSet.find(neighbor) == openSet.end()) 
-				if (std::find(openSet.begin(), openSet.end(), neighbor) == openSet.end())
+				//std::cout << " neighbour value: " << neighbor->value << " ";
+				if (closedSet.find(neighbor) != closedSet.end()) continue;
+				//if (std::find(closedSet.begin(), closedSet.end(), neighbor) != closedSet.end()) continue;
+				
+				if (openSet.find(neighbor) == openSet.end()) 
+				//if (std::find(openSet.begin(), openSet.end(), neighbor) == openSet.end())
 				{
-					//openSet.insert(neighbor);
-					openSet.push_back(neighbor);
+					neighbor->fScore = heuristicCostEstimate(gScore[current] + 1, neighbor, goal);
+					openSet.insert(neighbor);
+					//openSet.push_back(neighbor);
+					//for (auto & c : openSet) std::cout << "\n\tvalue: " << c->value << " F: " << c->fScore << '\n';
 				}
+				
 				auto tentativeGScore = gScore[current] + 1;
 				if (tentativeGScore >= gScore[neighbor]) continue;
 				cameFrom[neighbor] = current;
 				gScore[neighbor] = tentativeGScore;
 				fScore[neighbor] = heuristicCostEstimate(gScore[neighbor], neighbor, goal);
-				neighbor->fScore = fScore[neighbor];
-				std::cout << " neighbour fscore: " << neighbor->fScore << "|";
+
+				//std::cout << ", neighbour fscore: " << neighbor->fScore << "|\n";
+				
+				//for (auto & c : openSet) std::cout << "\tvalue: " << c->value << " F: " << c->fScore << '\n';
 			}
 		}
-		std::cout << std::endl;
+		//std::cout << std::endl;
 	}	
 	
 	return path;
@@ -119,11 +129,11 @@ unsigned int ARobot::heuristicCostEstimate(unsigned int gValue, std::shared_ptr<
 {
 	// using Manhattan distance for hValue
 	unsigned int hValue = std::abs((int) start->col - (int) goal->col) + std::abs((int) start->row - (int) goal->row);
-	std::cout << "H: " << hValue << ", ";
+	//std::cout << "H: " << hValue << ", ";
 	// 2D distance for hValue
 	//unsigned int hValue = std::sqrt(std::pow((int)start->col - (int)goal->col, 2) + std::pow((int)start->row - (int)goal->row, 2));
 	unsigned int fValue = gValue + hValue;
-	std::cout << "F: " << fValue << std::endl;
+	//std::cout << "F: " << fValue << std::endl;
 	return fValue;
 }
 
@@ -143,6 +153,14 @@ std::vector< std::shared_ptr<Cell> > ARobot::reconstructPath(std::map< std::shar
 std::shared_ptr<Cell> ARobot::getLF(std::vector<std::shared_ptr<Cell>> openSet)
 
 {
+	auto min = std::min_element(openSet.begin(), openSet.end(),
+		[](const std::shared_ptr<Cell> &a, const std::shared_ptr<Cell> &b)
+	{
+		return a->fScore  < b->fScore;
+	});
+	return *min;
+}
+	/*
 	std::shared_ptr<Cell> result = nullptr;
 	unsigned int minF = 0 - 1;
 	for (unsigned int i = 0; i < openSet.size(); ++i)
@@ -154,4 +172,4 @@ std::shared_ptr<Cell> ARobot::getLF(std::vector<std::shared_ptr<Cell>> openSet)
 	}
 	
 	return result;
-}
+	*/
