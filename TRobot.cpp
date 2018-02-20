@@ -39,31 +39,10 @@ std::vector< std::shared_ptr<Cell> > TRobot::solveMaze()
 		
 		if (numberOfNeighbors <= 2)
 		{
-			//Step(cameFrom, current, unmarkedNeighbors, markedNeighbors);
-			std::shared_ptr<Cell> next;
-			//findNextCell(unmarkedNeighbors, cameFrom, next, markedNeighbors);
-			for (int i = 0; i < unmarkedNeighbors.size(); ++i)
-			{
-				if (unmarkedNeighbors[i] != cameFrom && unmarkedNeighbors[i] != nullptr)
-				{
-					next = unmarkedNeighbors[i]; //std::cout << i << ". ";
-					break;
-				}
-			}
-			if (!next)
-			{
-				for (int i = 0; i < markedNeighbors.size(); ++i)
-				{
-					if (markedNeighbors[i] != cameFrom && markedNeighbors[i] != nullptr)
-					{
-						next = unmarkedNeighbors[i];
-						break;
-					}
-				}
-			}
-			std::cout << next->value << ".";
-			cameFrom = current;
-			current = next;
+			Step(cameFrom, current, unmarkedNeighbors, markedNeighbors);
+			//std::cout << next->value << ".";
+			//cameFrom = current;
+			//current = next;
 		}
 		else
 		{
@@ -94,20 +73,7 @@ std::vector< std::shared_ptr<Cell> > TRobot::solveMaze()
 void TRobot::Step(std::shared_ptr<Cell> &cameFrom, std::shared_ptr<Cell> &current, std::vector<std::shared_ptr<Cell>> &unmarkedNeighbors, std::vector<std::shared_ptr<Cell>> &markedNeighbors)
 {
 	std::shared_ptr<Cell> next;
-	//findNextCell(unmarkedNeighbors, cameFrom, next, markedNeighbors);
-	for (int i = 0; i < unmarkedNeighbors.size(); ++i)
-	{
-		if (unmarkedNeighbors[i] != cameFrom && unmarkedNeighbors[i] != nullptr) next = unmarkedNeighbors[i]; std::cout << next->value << ". ";
-		break;
-	}
-	if (!next)
-	{
-		for (int i = 0; i < markedNeighbors.size(); ++i)
-		{
-			if (markedNeighbors[i] != cameFrom && markedNeighbors[i] != nullptr) next = unmarkedNeighbors[i];
-			break;
-		}
-	}
+	findNextCell(unmarkedNeighbors, cameFrom, next, markedNeighbors);
 	cameFrom = current;
 	current = next;
 }
@@ -116,15 +82,21 @@ void TRobot::findNextCell(std::vector<std::shared_ptr<Cell>> &unmarkedNeighbors,
 {
 	for (int i = 0; i < unmarkedNeighbors.size(); ++i)
 	{
-		if (unmarkedNeighbors[i] != cameFrom && unmarkedNeighbors[i] != nullptr) next = unmarkedNeighbors[i]; std::cout << next->value << ". ";
-		break;
+		if (unmarkedNeighbors[i] != cameFrom && unmarkedNeighbors[i] != nullptr)
+		{
+			next = unmarkedNeighbors[i]; //std::cout << next->value << ". ";
+			break;
+		}
 	}
 	if (!next)
 	{
 		for (int i = 0; i < markedNeighbors.size(); ++i)
 		{
-			if (markedNeighbors[i] != cameFrom && markedNeighbors[i] != nullptr) next = unmarkedNeighbors[i];
-			break;
+			if (markedNeighbors[i] != cameFrom && markedNeighbors[i] != nullptr)
+			{
+				next = unmarkedNeighbors[i];
+				break;
+			}
 		}
 	}
 }
