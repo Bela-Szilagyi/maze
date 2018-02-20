@@ -28,6 +28,8 @@ public:
 	bool isVisited = false;
 	bool isPopped = false;
 	bool isInAStarPath = false;
+	bool isMarkedByTremaux = false;
+	bool isInTremauxPath = false;
 
 	int numOfInnerWalls();
 	int numOfAllWalls();

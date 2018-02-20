@@ -97,7 +97,11 @@ bool Logic::doLogic()
 		AStarSolveMaze(); //std::cout << "AStar algo begins\n";
 		return false;
 	}
-
+	else if (logicalState == tremaux)
+	{
+		tremauxSolveMaze();
+		return false;
+	}
 	else if (logicalState == systemPause) { 
 		pauseSystem();
 		return false;
@@ -110,7 +114,7 @@ void Logic::createMaze()
 	std::shared_ptr<Cell> currCell = maze.root; //1. Make the initial cell the current cell
 												//currCell->isVisited = true;	//and mark it as visited
 	
-	SDL_Event SDL_event;
+	/*SDL_Event SDL_event;
 	do
 	{
 
@@ -122,36 +126,36 @@ void Logic::createMaze()
 		}
 		//std::cout << "carving\n";
 	} while (!(maze.unvisitedNeighbors.empty() && maze.stack.empty())); //2. While there are unvisited cells
-	
-	/*
-	maze.removeWall(currCell, currCell->sNeighbor);
-	currCell = currCell->eNeighbor;
-	maze.removeWall(currCell, currCell->sNeighbor);
-	maze.removeWall(currCell, currCell->eNeighbor);
-	currCell = currCell->eNeighbor;
-	maze.removeWall(currCell, currCell->eNeighbor);
-	currCell = currCell->eNeighbor;
-	maze.removeWall(currCell, currCell->eNeighbor);
-	currCell = currCell->eNeighbor;
-	maze.removeWall(currCell, currCell->sNeighbor);
-	currCell = currCell->sNeighbor;
-	maze.removeWall(currCell, currCell->sNeighbor);
-	maze.removeWall(currCell, currCell->wNeighbor);
-	currCell = currCell->wNeighbor;
-	maze.removeWall(currCell, currCell->wNeighbor);
-	currCell = currCell->wNeighbor;
-	maze.removeWall(currCell, currCell->sNeighbor);
-	currCell = currCell->wNeighbor;
-	maze.removeWall(currCell, currCell->sNeighbor);
-	currCell = currCell->wNeighbor;
-	maze.removeWall(currCell, currCell->sNeighbor);
-	currCell = currCell->sNeighbor;
-	maze.removeWall(currCell, currCell->eNeighbor);
-	currCell = currCell->eNeighbor;
-	maze.removeWall(currCell, currCell->eNeighbor);
 	*/
-	logicalState = makeMazeUnperfect;
 	
+	maze.removeWall(currCell, currCell->sNeighbor);
+	currCell = currCell->eNeighbor;
+	maze.removeWall(currCell, currCell->sNeighbor);
+	maze.removeWall(currCell, currCell->eNeighbor);
+	currCell = currCell->eNeighbor;
+	maze.removeWall(currCell, currCell->eNeighbor);
+	currCell = currCell->eNeighbor;
+	maze.removeWall(currCell, currCell->eNeighbor);
+	currCell = currCell->eNeighbor;
+	maze.removeWall(currCell, currCell->sNeighbor);
+	currCell = currCell->sNeighbor;
+	maze.removeWall(currCell, currCell->sNeighbor);
+	maze.removeWall(currCell, currCell->wNeighbor);
+	currCell = currCell->wNeighbor;
+	maze.removeWall(currCell, currCell->wNeighbor);
+	currCell = currCell->wNeighbor;
+	maze.removeWall(currCell, currCell->sNeighbor);
+	currCell = currCell->wNeighbor;
+	maze.removeWall(currCell, currCell->sNeighbor);
+	currCell = currCell->wNeighbor;
+	maze.removeWall(currCell, currCell->sNeighbor);
+	currCell = currCell->sNeighbor;
+	maze.removeWall(currCell, currCell->eNeighbor);
+	currCell = currCell->eNeighbor;
+	maze.removeWall(currCell, currCell->eNeighbor);
+	
+	//logicalState = makeMazeUnperfect;
+	logicalState = tremaux;
 
 	//logicalState = aStar;
 }
@@ -196,7 +200,8 @@ void Logic::makeUnperfect()
 	}
 	std::cout << "Making maze unperfect done\n";
 	display.showMaze(maze, nullptr);
-	logicalState = aStar;
+	//logicalState = aStar;
+	logicalState = tremaux;
 }
 
 void Logic::AStarSolveMaze()
@@ -204,7 +209,7 @@ void Logic::AStarSolveMaze()
 	ARobot aRobot(maze);
 	std::vector< std::shared_ptr<Cell> > path = aRobot.solveMaze();
 
-	std::cout << "Path size: " << path.size() << '\n';
+	//std::cout << "Path size: " << path.size() << '\n';
 	SDL_Event SDL_event;
 
 	for (auto& cella : path) {
@@ -216,8 +221,25 @@ void Logic::AStarSolveMaze()
 		}
 		//SDL_Delay(200);
 	}
-	logicalState = systemPause;
+	logicalState = tremaux;
 
+}
+
+void Logic::tremauxSolveMaze()
+{
+	SDL_Event SDL_event;
+	//std::cout << "Tremaux started" << std::endl;
+	TRobot trobot(maze);
+	std::vector< std::shared_ptr<Cell> > path = trobot.solveMaze();
+	for (auto& cella : path) {
+		cella->isInAStarPath = true;
+		display.showMaze(maze, cella);
+		if (SDL_PollEvent(&SDL_event) != 0 && SDL_event.type == SDL_QUIT) {
+			logicalState = closeWindow;
+			return;
+		}
+	}
+	logicalState = systemPause;
 }
 
 void Logic::pauseSystem()

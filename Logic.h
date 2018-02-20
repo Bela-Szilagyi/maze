@@ -7,6 +7,7 @@
 #include "Display.h"
 #include "Robot.h"
 #include "ARobot.h"
+#include "TRobot.h"
 
 
 enum LogicalState 
@@ -14,6 +15,7 @@ enum LogicalState
 	create,
 	makeMazeUnperfect,
 	aStar,
+	tremaux,
 	systemPause,
 	closeWindow
 };
@@ -29,6 +31,7 @@ public:
 	void createMaze();
 	void makeUnperfect();
 	void AStarSolveMaze();
+	void tremauxSolveMaze();
 	void pauseSystem();
 private:
 	bool handleEvents(SDL_Event &event);
