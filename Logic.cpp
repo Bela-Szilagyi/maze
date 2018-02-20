@@ -224,7 +224,7 @@ void Logic::pauseSystem()
 {
 	SDL_Event SDL_event;
 	//display.showMaze(maze, maze.root);
-	display.showMaze(maze, nullptr);
+	//display.showMaze(maze, nullptr);
 	if (SDL_PollEvent(&SDL_event) != 0 && SDL_event.type == SDL_QUIT) {
 		logicalState = closeWindow;
 		return;
