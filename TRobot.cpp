@@ -24,7 +24,8 @@ std::vector< std::shared_ptr<Cell> > TRobot::solveMaze()
 	std::shared_ptr<Cell> cameFrom = nullptr;
 	int indexOfLastElement = maze.width * maze.height - 1;
 	std::shared_ptr<Cell> goal = maze.cells[indexOfLastElement];
-	
+	bool markNeeded = false;
+
 	while (current != goal)
 	{
 		path.push_back(current);
@@ -39,24 +40,28 @@ std::vector< std::shared_ptr<Cell> > TRobot::solveMaze()
 		
 		if (numberOfNeighbors <= 2)
 		{
-			Step(cameFrom, current, unmarkedNeighbors, markedNeighbors);
-			//std::cout << next->value << ".";
-			//cameFrom = current;
-			//current = next;
+			markNeeded = false;
+			Step(cameFrom, current, unmarkedNeighbors, markedNeighbors, markNeeded);
+			//current->isMarkedByTremaux = true;
+			//std::cout << "next value: " << current->value << std::endl;
 		}
 		else
 		{
-			break;
+			markNeeded = true;
 			if(unmarkedNeighbors.size() > 0)
 			{
-				Step(cameFrom, current, unmarkedNeighbors, markedNeighbors);
+				Step(cameFrom, current, unmarkedNeighbors, markedNeighbors, markNeeded);
+				std::cout << "next value: " << current->value << std::endl;
 				//current->isMarkedByTremaux = true;
+				current->isMarkedByTremaux = true;
 			}
 			else
 			{
-				break;
+				//break;
 				//current->isMarkedByTremaux = true;
-				//current = cameFrom;
+				std::cout << "next value: " << current->value << std::endl;
+				current = cameFrom;
+				current->isMarkedByTremaux = true;
 			}
 		}
 		std::cout << std::endl;
@@ -70,7 +75,7 @@ std::vector< std::shared_ptr<Cell> > TRobot::solveMaze()
 	return path;
 }
 
-void TRobot::Step(std::shared_ptr<Cell> &cameFrom, std::shared_ptr<Cell> &current, std::vector<std::shared_ptr<Cell>> &unmarkedNeighbors, std::vector<std::shared_ptr<Cell>> &markedNeighbors)
+void TRobot::Step(std::shared_ptr<Cell> &cameFrom, std::shared_ptr<Cell> &current, std::vector<std::shared_ptr<Cell>> &unmarkedNeighbors, std::vector<std::shared_ptr<Cell>> &markedNeighbors, bool markNeeded)
 {
 	std::shared_ptr<Cell> next;
 	findNextCell(unmarkedNeighbors, cameFrom, next, markedNeighbors);
@@ -94,7 +99,7 @@ void TRobot::findNextCell(std::vector<std::shared_ptr<Cell>> &unmarkedNeighbors,
 		{
 			if (markedNeighbors[i] != cameFrom && markedNeighbors[i] != nullptr)
 			{
-				next = unmarkedNeighbors[i];
+				next = markedNeighbors[i];
 				break;
 			}
 		}
@@ -105,22 +110,22 @@ void TRobot::getNeighborInfo(std::shared_ptr<Cell> &current, std::vector<std::sh
 {
 	if (!current->nWall)
 	{
-		if (current->isMarkedByTremaux) markedNeighbors.push_back(current->nNeighbor);
+		if (current->nNeighbor->isMarkedByTremaux) markedNeighbors.push_back(current->nNeighbor);
 		else unmarkedNeighbors.push_back(current->nNeighbor);
 	}
 	if (!current->eWall)
 	{
-		if (current->isMarkedByTremaux) markedNeighbors.push_back(current->eNeighbor);
+		if (current->eNeighbor->isMarkedByTremaux) markedNeighbors.push_back(current->eNeighbor);
 		else unmarkedNeighbors.push_back(current->eNeighbor);
 	}
 	if (!current->sWall)
 	{
-		if (current->isMarkedByTremaux) markedNeighbors.push_back(current->sNeighbor);
+		if (current->sNeighbor->isMarkedByTremaux) markedNeighbors.push_back(current->sNeighbor);
 		else unmarkedNeighbors.push_back(current->sNeighbor);
 	}
 	if (!current->wWall)
 	{
-		if (current->isMarkedByTremaux) markedNeighbors.push_back(current->wNeighbor);
+		if (current->wNeighbor->isMarkedByTremaux) markedNeighbors.push_back(current->wNeighbor);
 		else unmarkedNeighbors.push_back(current->wNeighbor);
 	}
 }

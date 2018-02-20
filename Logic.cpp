@@ -114,7 +114,7 @@ void Logic::createMaze()
 	std::shared_ptr<Cell> currCell = maze.root; //1. Make the initial cell the current cell
 												//currCell->isVisited = true;	//and mark it as visited
 	
-	/*SDL_Event SDL_event;
+	SDL_Event SDL_event;
 	do
 	{
 
@@ -126,34 +126,34 @@ void Logic::createMaze()
 		}
 		//std::cout << "carving\n";
 	} while (!(maze.unvisitedNeighbors.empty() && maze.stack.empty())); //2. While there are unvisited cells
+	
+	
+	/*maze.removeWall(currCell, currCell->sNeighbor);
+	currCell = currCell->eNeighbor;
+	maze.removeWall(currCell, currCell->sNeighbor);
+	maze.removeWall(currCell, currCell->eNeighbor);
+	currCell = currCell->eNeighbor;
+	maze.removeWall(currCell, currCell->eNeighbor);
+	currCell = currCell->eNeighbor;
+	maze.removeWall(currCell, currCell->eNeighbor);
+	currCell = currCell->eNeighbor;
+	maze.removeWall(currCell, currCell->sNeighbor);
+	currCell = currCell->sNeighbor;
+	maze.removeWall(currCell, currCell->sNeighbor);
+	maze.removeWall(currCell, currCell->wNeighbor);
+	currCell = currCell->wNeighbor;
+	maze.removeWall(currCell, currCell->wNeighbor);
+	currCell = currCell->wNeighbor;
+	maze.removeWall(currCell, currCell->sNeighbor);
+	currCell = currCell->wNeighbor;
+	maze.removeWall(currCell, currCell->sNeighbor);
+	currCell = currCell->wNeighbor;
+	maze.removeWall(currCell, currCell->sNeighbor);
+	currCell = currCell->sNeighbor;
+	maze.removeWall(currCell, currCell->eNeighbor);
+	currCell = currCell->eNeighbor;
+	maze.removeWall(currCell, currCell->eNeighbor);
 	*/
-	
-	maze.removeWall(currCell, currCell->sNeighbor);
-	currCell = currCell->eNeighbor;
-	maze.removeWall(currCell, currCell->sNeighbor);
-	maze.removeWall(currCell, currCell->eNeighbor);
-	currCell = currCell->eNeighbor;
-	maze.removeWall(currCell, currCell->eNeighbor);
-	currCell = currCell->eNeighbor;
-	maze.removeWall(currCell, currCell->eNeighbor);
-	currCell = currCell->eNeighbor;
-	maze.removeWall(currCell, currCell->sNeighbor);
-	currCell = currCell->sNeighbor;
-	maze.removeWall(currCell, currCell->sNeighbor);
-	maze.removeWall(currCell, currCell->wNeighbor);
-	currCell = currCell->wNeighbor;
-	maze.removeWall(currCell, currCell->wNeighbor);
-	currCell = currCell->wNeighbor;
-	maze.removeWall(currCell, currCell->sNeighbor);
-	currCell = currCell->wNeighbor;
-	maze.removeWall(currCell, currCell->sNeighbor);
-	currCell = currCell->wNeighbor;
-	maze.removeWall(currCell, currCell->sNeighbor);
-	currCell = currCell->sNeighbor;
-	maze.removeWall(currCell, currCell->eNeighbor);
-	currCell = currCell->eNeighbor;
-	maze.removeWall(currCell, currCell->eNeighbor);
-	
 	//logicalState = makeMazeUnperfect;
 	logicalState = tremaux;
 
