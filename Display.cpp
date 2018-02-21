@@ -3,38 +3,38 @@
 /*
 void Display::printMazeValues(Maze m)
 {
-	std::shared_ptr<Cell> firstInRow = m.root;
-	while (true)
-	{
-		std::shared_ptr<Cell> actCell = firstInRow;
-		while (true)
-		{
-			actCell->nWall ? std::cout << "---" : std::cout << "   ";
-			if (actCell->eNeighbor) actCell = actCell->eNeighbor;
-			else break;
-		};
-		std::cout << std::endl;
-		actCell = firstInRow;
-		while (true)
-		{
-			actCell->wWall ? std::cout << "|" : std::cout << " ";
-			std::cout << actCell->value;
-			actCell->eWall ? std::cout << "|" : std::cout << " ";
-			if (actCell->eNeighbor) actCell = actCell->eNeighbor;
-			else break;
-		};
-		std::cout << std::endl;
-		actCell = firstInRow;
-		while (true)
-		{
-			actCell->sWall ? std::cout << "---" : std::cout << "   ";
-			if (actCell->eNeighbor) actCell = actCell->eNeighbor;
-			else break;
-		};
-		std::cout << std::endl;
-		if (firstInRow->sNeighbor) firstInRow = firstInRow->sNeighbor;
-		else break;
-	}
+std::shared_ptr<Cell> firstInRow = m.root;
+while (true)
+{
+std::shared_ptr<Cell> actCell = firstInRow;
+while (true)
+{
+actCell->nWall ? std::cout << "---" : std::cout << "   ";
+if (actCell->eNeighbor) actCell = actCell->eNeighbor;
+else break;
+};
+std::cout << std::endl;
+actCell = firstInRow;
+while (true)
+{
+actCell->wWall ? std::cout << "|" : std::cout << " ";
+std::cout << actCell->value;
+actCell->eWall ? std::cout << "|" : std::cout << " ";
+if (actCell->eNeighbor) actCell = actCell->eNeighbor;
+else break;
+};
+std::cout << std::endl;
+actCell = firstInRow;
+while (true)
+{
+actCell->sWall ? std::cout << "---" : std::cout << "   ";
+if (actCell->eNeighbor) actCell = actCell->eNeighbor;
+else break;
+};
+std::cout << std::endl;
+if (firstInRow->sNeighbor) firstInRow = firstInRow->sNeighbor;
+else break;
+}
 }
 */
 
@@ -90,12 +90,30 @@ Display::Display()
 	*/
 }
 
-void Display::showMaze(const Maze &m, const std::shared_ptr<Cell> currCell, const std::shared_ptr<Cell> currCell2)
+void Display::showMaze(const Maze &m, const std::shared_ptr<Cell> currCell)
 {
 	int xOffset = 10;
 	int yOffset = 10;
 	int cellSize = 1300 / m.width < 700 / m.height ? 1300 / m.width : 700 / m.height;
-	if (!currCell) //drawing entire maze
+	if (currCell) //if drawing curCell only
+	{
+		SDL_Rect rect;
+		rect.x = xOffset + currCell->col * cellSize;
+		rect.y = yOffset + currCell->row * cellSize;
+		rect.w = cellSize;
+		rect.h = cellSize;
+		SDL_SetRenderDrawColor(renderer, 255-currCell->isInTremauxPath*10, 255-currCell->isInTremauxPath*10, 0, SDL_ALPHA_OPAQUE); //yellow
+		SDL_RenderFillRect(renderer, &rect);
+		SDL_SetRenderDrawColor(renderer, 237, 106, 90, SDL_ALPHA_OPAQUE); //terra cotta
+		int actCellLeftX = xOffset + currCell->col * cellSize;
+		int actCellUpperY = yOffset + currCell->row * cellSize;
+		if (currCell->nWall) SDL_RenderDrawLine(renderer, actCellLeftX, actCellUpperY, actCellLeftX + cellSize - 1, actCellUpperY);
+		if (currCell->eWall) SDL_RenderDrawLine(renderer, actCellLeftX + cellSize - 1, actCellUpperY, actCellLeftX + cellSize - 1, actCellUpperY + cellSize - 1);
+		if (currCell->sWall) SDL_RenderDrawLine(renderer, actCellLeftX + cellSize - 1, actCellUpperY + cellSize - 1, actCellLeftX, actCellUpperY + cellSize - 1);
+		if (currCell->wWall) SDL_RenderDrawLine(renderer, actCellLeftX, actCellUpperY + cellSize - 1, actCellLeftX, actCellUpperY);
+		SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE); //black
+	}
+	else //drawing entire maze
 	{
 		SDL_RenderClear(renderer);
 		std::shared_ptr<Cell> actCell = m.root;
@@ -110,9 +128,7 @@ void Display::showMaze(const Maze &m, const std::shared_ptr<Cell> currCell, cons
 				rect.y = yOffset + row * cellSize;
 				rect.w = cellSize;
 				rect.h = cellSize;
-				if (actCell == currCell2) SDL_SetRenderDrawColor(renderer, 155, 193, 188, SDL_ALPHA_OPAQUE);
-				else if (actCell->isInAStarPath) SDL_SetRenderDrawColor(renderer, 255, 255, 0, SDL_ALPHA_OPAQUE); //yellow -> is in AStarPath
-				else if (actCell->isInTremauxPath) SDL_SetRenderDrawColor(renderer, 255, 255, 0, SDL_ALPHA_OPAQUE); //yellow -> is in TremauxPath
+				if (actCell == currCell) SDL_SetRenderDrawColor(renderer, 155, 193, 188, SDL_ALPHA_OPAQUE);
 				else if (actCell->numOfAllWalls() == 3) SDL_SetRenderDrawColor(renderer, 230, 235, 224, SDL_ALPHA_OPAQUE); //platinum -> dead end
 				else SDL_SetRenderDrawColor(renderer, 92, 164, 169, SDL_ALPHA_OPAQUE);
 				SDL_RenderFillRect(renderer, &rect);
@@ -125,30 +141,6 @@ void Display::showMaze(const Maze &m, const std::shared_ptr<Cell> currCell, cons
 				if (actCell->wWall) SDL_RenderDrawLine(renderer, actCellLeftX, actCellUpperY + cellSize - 1, actCellLeftX, actCellUpperY);
 				SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE); //black
 				if (actCell->eNeighbor) actCell = actCell->eNeighbor;
-			}
-			if (firstInRow->sNeighbor) firstInRow = firstInRow->sNeighbor;
-		}
-	}
-	else //if drawing curCell only
-	{
-		std::shared_ptr<Cell> actCell = m.root;
-		std::shared_ptr<Cell> firstInRow = actCell;
-		for (int row = 0; row < m.height; ++row)
-		{
-			actCell = firstInRow;
-			for (int column = 0; column < m.width; ++column)
-			{
-				SDL_Rect rect;
-				rect.x = xOffset + column * cellSize;
-				rect.y = yOffset + row * cellSize;
-				rect.w = cellSize;
-				rect.h = cellSize;
-				if (actCell == currCell)
-				{
-					SDL_SetRenderDrawColor(renderer, 155, 193, 188, SDL_ALPHA_OPAQUE);
-					SDL_RenderFillRect(renderer, &rect);
-					break;
-				}
 			}
 			if (firstInRow->sNeighbor) firstInRow = firstInRow->sNeighbor;
 		}
@@ -185,12 +177,12 @@ bool Display::createRenderer() {
 
 /*
 bool Graphics::initSDLImage() {
-	int imgFlags = IMG_INIT_PNG;
-	if (!(IMG_Init(imgFlags) & imgFlags)) {
-		printf("SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError());
-		return false;
-	}
-	return true;
+int imgFlags = IMG_INIT_PNG;
+if (!(IMG_Init(imgFlags) & imgFlags)) {
+printf("SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError());
+return false;
+}
+return true;
 }
 */
 

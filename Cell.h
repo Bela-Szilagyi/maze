@@ -29,7 +29,7 @@ public:
 	bool isPopped = false;
 	bool isInAStarPath = false;
 	bool isMarkedByTremaux = false;
-	bool isInTremauxPath = false;
+	int isInTremauxPath = 0;
 	std::vector<std::shared_ptr<Cell>> availableNeighbors;
 	int availableNeighborCnt = 0;
 

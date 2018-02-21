@@ -232,8 +232,8 @@ void Logic::tremauxSolveMaze()
 	TRobot trobot(maze);
 	std::vector< std::shared_ptr<Cell> > path = trobot.solveMaze();
 	for (auto& cella : path) {
-		cella->isInTremauxPath = true;
-		display.showMaze(maze, nullptr, cella);
+		cella->isInTremauxPath++;
+		display.showMaze(maze, cella);
 		if (SDL_PollEvent(&SDL_event) != 0 && SDL_event.type == SDL_QUIT) {
 			logicalState = closeWindow;
 			return;
@@ -246,7 +246,7 @@ void Logic::pauseSystem()
 {
 	SDL_Event SDL_event;
 	//display.showMaze(maze, maze.root);
-	display.showMaze(maze, nullptr);
+	//display.showMaze(maze, nullptr);
 	if (SDL_PollEvent(&SDL_event) != 0 && SDL_event.type == SDL_QUIT) {
 		logicalState = closeWindow;
 		return;
