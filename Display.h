@@ -16,7 +16,7 @@ public:
 	bool init();
 	//void printMazeValues(Maze m);
 	static void printMaze(const Maze &m);
-	void showMaze(const Maze &m, const std::shared_ptr<Cell> currCell);
+	void showMaze(const Maze &m, const std::shared_ptr<Cell> currCell, const std::shared_ptr<Cell> currCell2 = nullptr);
 private:
 	SDL_Window * window;
 	SDL_Renderer *renderer;
