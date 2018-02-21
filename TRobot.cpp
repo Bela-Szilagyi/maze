@@ -51,49 +51,19 @@ std::vector< std::shared_ptr<Cell> > TRobot::solveMaze()
 			if(unmarkedNeighbors.size() > 0)
 			{
 				Step(cameFrom, current, unmarkedNeighbors, markedNeighbors, markNeeded);
-
-				/*int index = current->availableNeighborCnt % markedNeighbors.size();
-				++current->availableNeighborCnt;
-				current = markedNeighbors[index];
-				//++index;
-				//(current->availableNeighborCnt)++;
-				//current->availableNeighborCnt = index;*/
-
-				std::cout << "next value: " << current->value << std::endl;
-				//current->isMarkedByTremaux = true;
 				current->isMarkedByTremaux = true;
 			}
 			else
 			{
-				//break;
-				//current->isMarkedByTremaux = true;
 				current->availableNeighbors = markedNeighbors;
-				std::cout << "available neighbors: " << std::endl;
-				for (int i = 0; i < current->availableNeighbors.size(); ++i) if (current->availableNeighbors[i]) std::cout << current->availableNeighbors[i]->value << ", ";
-				//current = cameFrom;
-				//current = current->availableNeighbors[current->availableNeighborCnt];
 				int index = current->availableNeighborCnt % markedNeighbors.size();
 				++current->availableNeighborCnt;
 				cameFrom = current;
 				current = markedNeighbors[index];
-				//++index;
-				//(current->availableNeighborCnt)++;
-				//current->availableNeighborCnt = index;
-				std::cout << "index: " << index << std::endl;
-				std::cout << "cnt: " << current->availableNeighborCnt << std::endl;
-				//current->availableNeighbors.erase(remove(current->availableNeighbors.begin(), current->availableNeighbors.end(), current), current->availableNeighbors.end());
-				std::cout << "next value: " << current->value << std::endl;
 				current->isMarkedByTremaux = true;
 			}
 		}
-		std::cout << std::endl;
-		//break;
-		//current = ....
 	}
-
-
-	//std::vector< std::shared_ptr<Cell> > result;
-	//result.push_back(nullptr);
 	return path;
 }
 
@@ -126,7 +96,6 @@ void TRobot::findNextCell(std::vector<std::shared_ptr<Cell>> &unmarkedNeighbors,
 			if (markedNeighbors[i] != cameFrom && markedNeighbors[i] != nullptr)
 			{
 				next = markedNeighbors[i];
-				std::cout << "came from: " << cameFrom->value << " next: " << next->value << std::endl;
 				break;
 			}
 		}
