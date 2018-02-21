@@ -102,7 +102,8 @@ void Display::showMaze(const Maze &m, const std::shared_ptr<Cell> currCell)
 		rect.y = yOffset + currCell->row * cellSize;
 		rect.w = cellSize;
 		rect.h = cellSize;
-		SDL_SetRenderDrawColor(renderer, 255-currCell->isInTremauxPath*10, 255-currCell->isInTremauxPath*10, 0, SDL_ALPHA_OPAQUE); //yellow
+		int shade = (255 - currCell->isInTremauxPath * 10) > 0 ? 255 - currCell->isInTremauxPath * 10 : 0;
+		SDL_SetRenderDrawColor(renderer, shade, shade, 0, SDL_ALPHA_OPAQUE); //yellow
 		SDL_RenderFillRect(renderer, &rect);
 		SDL_SetRenderDrawColor(renderer, 237, 106, 90, SDL_ALPHA_OPAQUE); //terra cotta
 		int actCellLeftX = xOffset + currCell->col * cellSize;
