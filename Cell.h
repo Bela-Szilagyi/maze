@@ -30,6 +30,8 @@ public:
 	bool isInAStarPath = false;
 	bool isMarkedByTremaux = false;
 	bool isInTremauxPath = false;
+	std::vector<std::shared_ptr<Cell>> availableNeighbors;
+	int availableNeighborCnt = 0;
 
 	int numOfInnerWalls();
 	int numOfAllWalls();

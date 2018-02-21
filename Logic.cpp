@@ -154,8 +154,8 @@ void Logic::createMaze()
 	currCell = currCell->eNeighbor;
 	maze.removeWall(currCell, currCell->eNeighbor);
 	*/
-	//logicalState = makeMazeUnperfect;
-	logicalState = tremaux;
+	logicalState = makeMazeUnperfect;
+	//logicalState = tremaux;
 
 	//logicalState = aStar;
 }
@@ -233,7 +233,7 @@ void Logic::tremauxSolveMaze()
 	std::vector< std::shared_ptr<Cell> > path = trobot.solveMaze();
 	for (auto& cella : path) {
 		cella->isInAStarPath = true;
-		display.showMaze(maze, cella);
+		display.showMaze(maze, nullptr);
 		if (SDL_PollEvent(&SDL_event) != 0 && SDL_event.type == SDL_QUIT) {
 			logicalState = closeWindow;
 			return;
