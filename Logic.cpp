@@ -232,7 +232,7 @@ void Logic::tremauxSolveMaze()
 	TRobot trobot(maze);
 	std::vector< std::shared_ptr<Cell> > path = trobot.solveMaze();
 	for (auto& cella : path) {
-		cella->isInAStarPath = true;
+		cella->isInTremauxPath = true;
 		display.showMaze(maze, nullptr, cella);
 		if (SDL_PollEvent(&SDL_event) != 0 && SDL_event.type == SDL_QUIT) {
 			logicalState = closeWindow;

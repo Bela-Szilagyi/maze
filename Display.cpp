@@ -112,6 +112,7 @@ void Display::showMaze(const Maze &m, const std::shared_ptr<Cell> currCell, cons
 				rect.h = cellSize;
 				if (actCell == currCell2) SDL_SetRenderDrawColor(renderer, 155, 193, 188, SDL_ALPHA_OPAQUE);
 				else if (actCell->isInAStarPath) SDL_SetRenderDrawColor(renderer, 255, 255, 0, SDL_ALPHA_OPAQUE); //yellow -> is in AStarPath
+				else if (actCell->isInTremauxPath) SDL_SetRenderDrawColor(renderer, 255, 255, 0, SDL_ALPHA_OPAQUE); //yellow -> is in TremauxPath
 				else if (actCell->numOfAllWalls() == 3) SDL_SetRenderDrawColor(renderer, 230, 235, 224, SDL_ALPHA_OPAQUE); //platinum -> dead end
 				else SDL_SetRenderDrawColor(renderer, 92, 164, 169, SDL_ALPHA_OPAQUE);
 				SDL_RenderFillRect(renderer, &rect);
