@@ -24,33 +24,24 @@ std::vector< std::shared_ptr<Cell> > TRobot::solveMaze()
 	std::shared_ptr<Cell> cameFrom = nullptr;
 	int indexOfLastElement = maze.width * maze.height - 1;
 	std::shared_ptr<Cell> goal = maze.cells[indexOfLastElement];
-	bool markNeeded = false;
 
 	while (current != goal)
 	{
 		path.push_back(current);
-		std::cout << "Current value: " << current->value << " unMarked neighbors: ";
 		int numberOfNeighbors = 4 - current->numOfAllWalls();
 		std::vector<std::shared_ptr<Cell>> unmarkedNeighbors;
 		std::vector<std::shared_ptr<Cell>> markedNeighbors;
 		getNeighborInfo(current, markedNeighbors, unmarkedNeighbors);
-		for (int i = 0; i < unmarkedNeighbors.size(); ++i) if(unmarkedNeighbors[i]) std::cout << unmarkedNeighbors[i]->value << ", ";
-		std::cout << "marked neighbors: " << std::endl;
-		for (int i = 0; i < markedNeighbors.size(); ++i) if(markedNeighbors[i]) std::cout << markedNeighbors[i]->value << ", ";
-		
 		if (numberOfNeighbors <= 2)
 		{
-			markNeeded = false;
-			Step(cameFrom, current, unmarkedNeighbors, markedNeighbors, markNeeded);
+			Step(cameFrom, current, unmarkedNeighbors, markedNeighbors);
 			current->isMarkedByTremaux = true;
-			std::cout << "next value: " << current->value << std::endl;
 		}
 		else
 		{
-			markNeeded = true;
 			if(unmarkedNeighbors.size() > 0)
 			{
-				Step(cameFrom, current, unmarkedNeighbors, markedNeighbors, markNeeded);
+				Step(cameFrom, current, unmarkedNeighbors, markedNeighbors);
 				current->isMarkedByTremaux = true;
 			}
 			else
@@ -64,10 +55,11 @@ std::vector< std::shared_ptr<Cell> > TRobot::solveMaze()
 			}
 		}
 	}
+	path.push_back(current);
 	return path;
 }
 
-void TRobot::Step(std::shared_ptr<Cell> &cameFrom, std::shared_ptr<Cell> &current, std::vector<std::shared_ptr<Cell>> &unmarkedNeighbors, std::vector<std::shared_ptr<Cell>> &markedNeighbors, bool markNeeded)
+void TRobot::Step(std::shared_ptr<Cell> &cameFrom, std::shared_ptr<Cell> &current, std::vector<std::shared_ptr<Cell>> &unmarkedNeighbors, std::vector<std::shared_ptr<Cell>> &markedNeighbors)
 {
 	std::shared_ptr<Cell> next;
 	findNextCell(unmarkedNeighbors, cameFrom, next, markedNeighbors);
