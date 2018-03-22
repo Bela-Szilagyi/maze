@@ -15,9 +15,16 @@ Logic::~Logic()
 {
 }
 
-bool Logic::handleEvents(SDL_Event &event)
+void Logic::handleEvents(SDL_Event &event)
 {
-	return event.type == SDL_QUIT ? true : false;
+	if (event.type == SDL_MOUSEBUTTONDOWN) {
+		clickedX = -1; clickedY = -1;
+		int x, y;
+		SDL_GetMouseState(&x, &y);
+		std::cout << "Clicked x = " << x << ", y = " << y << std::endl;
+		clickedX = x; clickedY = y;
+	}
+	//return event.type == SDL_QUIT ? true : false;
 	/*
 	if (event.type == SDL_QUIT)
 	{
@@ -82,6 +89,11 @@ bool Logic::doLogic()
 {
 	//display.showMaze(maze, maze.root);
 	//SDL_Delay(2000);
+	if (logicalState == waitToStart)
+	{
+		waitToStartButtonPush();
+		return false;
+	}
 	if (logicalState == create)
 	{
 		createMaze();
@@ -107,6 +119,33 @@ bool Logic::doLogic()
 		return false;
 	}
 	else if (logicalState == closeWindow) return true;
+}
+
+void Logic::waitToStartButtonPush()
+{
+	/*SDL_Event SDL_event;
+
+	for (auto& cella : path) {
+		cella->isInAStarPath = true;
+		display.showMaze(maze, cella);
+		if (SDL_PollEvent(&SDL_event) != 0 && SDL_event.type == SDL_QUIT) {
+			logicalState = closeWindow;
+			return;
+		}*/
+	
+	display.renderButtons();
+	SDL_Event SDL_event;
+	while (SDL_PollEvent(&SDL_event) != 0)
+	{
+		handleEvents(SDL_event);
+		//if (clickedX > 0 && clickedY > 0) logicalState = create;
+		if (display.getClickedButton(clickedX, clickedY)) logicalState = create;
+		if (SDL_event.type == SDL_QUIT)
+		{
+			logicalState = closeWindow;
+			return;
+		}
+	}
 }
 
 void Logic::createMaze()
@@ -227,6 +266,7 @@ void Logic::AStarSolveMaze()
 
 void Logic::tremauxSolveMaze()
 {
+	display.renderButtons();
 	SDL_Event SDL_event;
 	//std::cout << "Tremaux started" << std::endl;
 	TRobot trobot(maze);
@@ -258,17 +298,18 @@ void Logic::run()
 {
 	//Display::printMaze(maze);
 	display.init();
-	logicalState = create;
+
+	std::shared_ptr<Button> startButton = std::make_shared<Button> (nullptr, nullptr, true);
+	display.addButton(startButton);
+
+	//logicalState = create;
+	logicalState = waitToStart;
 	bool quit = false;
 	Uint32 timePassed = 0;
 	Uint32 timeStep = 16;
 	while (!quit)
 	{
 		timePassed = SDL_GetTicks();
-		// SDL_Event SDL_event;
-		// while (SDL_PollEvent(&SDL_event) != 0)
-		//{
-			// quit = handleEvents(SDL_event);
 			quit = doLogic();
 			//quit = true;
 			while (timePassed + timeStep > SDL_GetTicks()) SDL_Delay(0);

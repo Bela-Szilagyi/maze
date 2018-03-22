@@ -8,10 +8,12 @@
 #include "Robot.h"
 #include "ARobot.h"
 #include "TRobot.h"
+#include "Button.h"
 
 
 enum LogicalState 
 {
+	waitToStart,
 	create,
 	makeMazeUnperfect,
 	aStar,
@@ -28,18 +30,20 @@ public:
 	~Logic();
 	void run();
 	bool doLogic();
+	void waitToStartButtonPush();
 	void createMaze();
 	void makeUnperfect();
 	void AStarSolveMaze();
 	void tremauxSolveMaze();
 	void pauseSystem();
 private:
-	bool handleEvents(SDL_Event &event);
+	void handleEvents(SDL_Event &event);
 	bool popup();
 	Maze getMaze();
 
 	Display display;
 	Maze maze;
 	LogicalState logicalState;
+	int clickedX = -1; int clickedY = -1;
 };
 

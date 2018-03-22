@@ -1,44 +1,5 @@
 #include "Display.h"
 
-/*
-void Display::printMazeValues(Maze m)
-{
-std::shared_ptr<Cell> firstInRow = m.root;
-while (true)
-{
-std::shared_ptr<Cell> actCell = firstInRow;
-while (true)
-{
-actCell->nWall ? std::cout << "---" : std::cout << "   ";
-if (actCell->eNeighbor) actCell = actCell->eNeighbor;
-else break;
-};
-std::cout << std::endl;
-actCell = firstInRow;
-while (true)
-{
-actCell->wWall ? std::cout << "|" : std::cout << " ";
-std::cout << actCell->value;
-actCell->eWall ? std::cout << "|" : std::cout << " ";
-if (actCell->eNeighbor) actCell = actCell->eNeighbor;
-else break;
-};
-std::cout << std::endl;
-actCell = firstInRow;
-while (true)
-{
-actCell->sWall ? std::cout << "---" : std::cout << "   ";
-if (actCell->eNeighbor) actCell = actCell->eNeighbor;
-else break;
-};
-std::cout << std::endl;
-if (firstInRow->sNeighbor) firstInRow = firstInRow->sNeighbor;
-else break;
-}
-}
-*/
-
-
 void Display::printMaze(const Maze &m)
 {
 	std::shared_ptr<Cell> firstInRow = m.root;
@@ -145,7 +106,23 @@ void Display::showMaze(const Maze &m, const std::shared_ptr<Cell> currCell)
 			if (firstInRow->sNeighbor) firstInRow = firstInRow->sNeighbor;
 		}
 	}
+	//renderButtons();
 	SDL_RenderPresent(renderer);
+}
+
+void Display::renderButtons()
+{
+	for (auto &button : buttonVector) {
+		if (button) {
+			button->render(renderer);
+		}
+	}
+	SDL_RenderPresent(renderer);
+}
+
+void Display::addButton(std::shared_ptr<Button> button)
+{
+	buttonVector.push_back(button);
 }
 
 Display::~Display() {
@@ -195,4 +172,25 @@ bool Display::init() {
 	if (!createRenderer()) return false;
 	//if (!initSDLImage()) return false;
 	return true;
+}
+
+std::shared_ptr<Button> Display::getClickedButton(const int &x, const int &y) const {
+	std::shared_ptr<Button> result = nullptr;
+	for (auto & button : buttonVector) {
+		if (button) {
+			if (x > button->getSdl_rect().x &&
+				x < button->getSdl_rect().x + button->getSdl_rect().w &&
+				y > button->getSdl_rect().y &&
+				y < button->getSdl_rect().y + button->getSdl_rect().h) {
+				//if (button->isActive()) {
+					//button->setClicked(true);
+					//std::cout << "Red button pushed :)" << std::endl;
+					result = button;
+					break;
+					//return result;
+				//}
+			}
+		}
+	}
+	return result;
 }
