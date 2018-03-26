@@ -5,6 +5,7 @@
 #include <time.h>
 #include <iostream>
 #include <string>
+#include <memory>
 //#include "FitnessCalc.h"
 
 class Individual
@@ -20,6 +21,13 @@ public:
 	int getGene(int index) { return genes[index]; }
 	void setGene(int index, int value);
 	std::string to_string_();
+
+	static std::vector<int> solution;
+	static void setSolution(std::vector<int> newSolution);
+	static void setSolution(std::string newSolution);
+	static int getFitness(Individual individual);
+	static int getMaxFitness();
+
 private:
 	//static int defaultGeneLength;
 	int fitness = 0;
