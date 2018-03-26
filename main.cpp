@@ -11,8 +11,8 @@ void renderAll()
 
 int main(int argc, char *args[])
 {
-	GeneticAlgorithm fSDFSDGSG;
-	fSDFSDGSG.run();
+	GeneticAlgorithm geneticAlgorithm;
+	geneticAlgorithm.run();
 	
 	
 	//Logic logic(60, 60);
