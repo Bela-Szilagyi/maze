@@ -1,22 +1,18 @@
 #include <iostream>
 #include "Population.h"
 
-
-
 Population::Population(int populationSize, bool initialise) : populationSize(populationSize)
 {
 	if (initialise)
 	{
 		for (int i = 0; i < size(); ++i)
 		{
-			//std::cout << "create individual nr " << i << std::endl;
 			std::shared_ptr<Individual> newIndividual = std::make_shared<Individual>();
-			newIndividual->generateIndividual();
+			newIndividual->generateIndividual(64);
 			saveIndividual(newIndividual);
 		}
 	}
 }
-
 
 Population::~Population()
 {

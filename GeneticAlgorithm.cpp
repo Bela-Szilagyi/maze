@@ -16,6 +16,6 @@ GeneticAlgorithm::~GeneticAlgorithm()
 void GeneticAlgorithm::run()
 {
 	Population population(3, true);
-	/*int fitness = population.getFittest()->getFitness();
-	std::cout << fitness << std::endl;*/
+	std::string genes = population.getFittest()->to_string_();
+	std::cout << genes << std::endl;
 }

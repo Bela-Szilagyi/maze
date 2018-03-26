@@ -11,6 +11,7 @@ void renderAll()
 
 int main(int argc, char *args[])
 {
+	srand(time(NULL));
 	GeneticAlgorithm geneticAlgorithm;
 	geneticAlgorithm.run();
 	
