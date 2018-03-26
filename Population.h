@@ -10,6 +10,10 @@ public:
 	~Population();
 
 	int size() { return populationSize; }
+	void saveIndividual(std::shared_ptr<Individual> individual);
+	std::shared_ptr<Individual> getIndividual(int index) { return individuals[index]; }
+	std::shared_ptr<Individual> getFittest();
+
 private:
 	std::vector< std::shared_ptr<Individual> > individuals;
 	int populationSize;
