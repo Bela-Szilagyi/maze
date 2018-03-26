@@ -51,6 +51,9 @@
     <ClCompile Include="Individual.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="FitnessCalc.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Maze.h">
@@ -84,6 +87,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Individual.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FitnessCalc.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,5 +1,6 @@
 #include <iostream>
 #include "Population.h"
+#include "FitnessCalc.h"
 
 Population::Population(int populationSize, bool initialise) : populationSize(populationSize)
 {

@@ -26,7 +26,7 @@ int Individual::getFitness()
 	// TODO: implement this fuction:
 	if (fitness == 0)
 	{
-		//fitness = FitnessCalc.getFitness(this);
+		//fitness = FitnessCalc::getFitness(this);
 	}
 	return fitness;
 }

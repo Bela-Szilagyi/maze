@@ -5,6 +5,7 @@
 #include <time.h>
 #include <iostream>
 #include <string>
+//#include "FitnessCalc.h"
 
 class Individual
 {
