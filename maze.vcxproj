@@ -134,9 +134,12 @@
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="Cell.cpp" />
     <ClCompile Include="Display.cpp" />
+    <ClCompile Include="GeneticAlgorithm.cpp" />
+    <ClCompile Include="Individual.cpp" />
     <ClCompile Include="Logic.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Maze.cpp" />
+    <ClCompile Include="Population.cpp" />
     <ClCompile Include="Robot.cpp" />
     <ClCompile Include="TRobot.cpp" />
   </ItemGroup>
@@ -145,8 +148,11 @@
     <ClInclude Include="Button.h" />
     <ClInclude Include="Cell.h" />
     <ClInclude Include="Display.h" />
+    <ClInclude Include="GeneticAlgorithm.h" />
+    <ClInclude Include="Individual.h" />
     <ClInclude Include="Logic.h" />
     <ClInclude Include="Maze.h" />
+    <ClInclude Include="Population.h" />
     <ClInclude Include="Robot.h" />
     <ClInclude Include="TRobot.h" />
   </ItemGroup>
