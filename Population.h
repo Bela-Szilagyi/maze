@@ -7,7 +7,7 @@
 class Population
 {
 public:
-	Population(int populationSize, bool initialise, int genesSize, std::string solution);
+	Population(int populationSize, bool initialise, int genesSize = 1, std::string solution = "1");
 	~Population();
 
 	int size() { return populationSize; }

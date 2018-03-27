@@ -18,6 +18,6 @@ private:
 
 	static std::shared_ptr<Individual> crossover(std::shared_ptr<Individual> individual1, std::shared_ptr<Individual> individual2);
 	static void mutate(std::shared_ptr<Individual> individual);
-	static Individual tournamentSelection(const Population &population);
+	static std::shared_ptr<Individual> tournamentSelection(Population &population);
 };
 
