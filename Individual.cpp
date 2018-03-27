@@ -4,13 +4,9 @@
 std::vector<int> Individual::solution;
 
 
-Individual::Individual()
+Individual::Individual(int geneLength) : geneLength(geneLength)
 {
-	//temp solution
-	for (int i = 0; i < 64; ++i)
-	{
-		solution.push_back(0);
-	}
+	generateIndividual();
 }
 
 
@@ -18,22 +14,19 @@ Individual::~Individual()
 {
 }
 
-void Individual::generateIndividual(int geneLenght)
+void Individual::generateIndividual()
 {
-	for (int i = 0; i < geneLenght; ++i)
+	for (int i = 0; i < geneLength; ++i)
 	{
 		int gene = rand() % 2;
 		genes.push_back(gene);
 	}
-	//fitness = 10;
 }
 
 int Individual::getFitness()
 {
-	// TODO: implement this fuction:
 	if (fitness == 0)
 	{
-		// if this is uncommented, the program will crash:
 		fitness = getFitness(*this);
 	}
 	return fitness;
@@ -55,11 +48,6 @@ std::string Individual::to_string_()
 	return result;
 }
 
-/*void Individual::setDefaultGeneLength(int length)
-{
-	defaultGeneLength = length;
-}*/
-
 void Individual::setSolution(std::vector<int> newSolution)
 {
 	solution = newSolution;
@@ -69,7 +57,7 @@ void Individual::setSolution(std::string newSolution)
 {
 	for (int i = 0; i < newSolution.size(); ++i)
 	{
-		solution[i] = newSolution[i] == '0' ? 0 : 1;
+		solution.push_back(newSolution[i] == '0' ? 0 : 1);
 	}
 }
 

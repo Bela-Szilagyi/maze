@@ -11,10 +11,10 @@
 class Individual
 {
 public:
-	Individual();
+	Individual(int geneLength);
 	~Individual();
 	
-	void generateIndividual(int geneLenght);
+	void generateIndividual();
 	int getFitness();
 	//static void setDefaultGeneLength(int length);
 	int size() { return genes.size(); }
@@ -31,6 +31,7 @@ public:
 private:
 	//static int defaultGeneLength;
 	int fitness = 0;
+	int geneLength;
 	//int genes[defaultGeneLength];
 	std::vector<int> genes;
 };
