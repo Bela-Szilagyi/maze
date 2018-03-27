@@ -1,17 +1,17 @@
 #include <iostream>
 #include "Population.h"
 
-Population::Population(int populationSize, bool initialise) : populationSize(populationSize)
+Population::Population(int populationSize, bool initialise, int genesSize, std::string solution) : populationSize(populationSize)
 {
 	if (initialise)
 	{
+		Individual::setSolution(solution);
 		for (int i = 0; i < size(); ++i)
 		{
-			std::shared_ptr<Individual> newIndividual = std::make_shared<Individual>(4);
+			std::shared_ptr<Individual> newIndividual = std::make_shared<Individual>(genesSize);
 			//newIndividual->generateIndividual(4);
 			saveIndividual(newIndividual);
 		}
-		Individual::setSolution("1111");
 	}
 }
 
