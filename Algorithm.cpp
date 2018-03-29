@@ -14,11 +14,36 @@ Algorithm::~Algorithm()
 {
 }
 
-Population Algorithm::evolvePopulation(Population & population)
+std::shared_ptr<Population>  Algorithm::evolvePopulation(std::shared_ptr<Population> population)
 {
 	//std::cout << "Evolving population...." << std::endl;
 	// TODO: implement this function
 
+	std::shared_ptr<Population> newPopulation = std::make_shared<Population>(population->size(), false);
+
+	if (elitism)
+	{
+		newPopulation->saveIndividual(population->getFittest());
+	}
+
+	int elitismOffset;
+	if (elitism) {
+		elitismOffset = 1;
+	}
+	else {
+		elitismOffset = 0;
+	}
+
+	for (int i = elitismOffset; i < population->size(); ++i) {
+		std::shared_ptr<Individual> indiv1 = tournamentSelection(population);
+		std::shared_ptr<Individual> indiv2 = tournamentSelection(population);
+		std::shared_ptr<Individual> newIndiv = crossover(indiv1, indiv2);
+		newPopulation->saveIndividual(newIndiv);
+	}
+
+	for (int i = elitismOffset; i < newPopulation->size(); ++i) {
+		mutate(newPopulation->getIndividual(i));
+	}
 	// for testing mutation()
 	//std::shared_ptr<Individual> indi = population.getFittest();
 	//mutate(indi);
@@ -36,7 +61,7 @@ Population Algorithm::evolvePopulation(Population & population)
 	//std::cout << "Tournament winner: " << TSTest->to_string_() << std::endl;
 
 
-	return population;
+	return newPopulation;
 }
 
 std::shared_ptr<Individual> Algorithm::crossover(std::shared_ptr<Individual> individual1, std::shared_ptr<Individual> individual2)
@@ -68,15 +93,15 @@ void Algorithm::mutate(std::shared_ptr<Individual> individual)
 	}
 }
 
-std::shared_ptr<Individual> Algorithm::tournamentSelection(Population & population)
+std::shared_ptr<Individual> Algorithm::tournamentSelection(std::shared_ptr<Population> population)
 {
 	Population tournament(tournamentSize, false);
 	//std::cout << "They are going to a tournament: " << std::endl;
 	for (int i = 0; i < tournamentSize; ++i)
 	{
-		int randomId = rand() % population.size();
+		int randomId = rand() % population->size();
 		//std::cout << population.getIndividual(randomId)->to_string_() << std::endl;
-		tournament.saveIndividual(population.getIndividual(randomId));
+		tournament.saveIndividual(population->getIndividual(randomId));
 	}
 	//std::cout << "And the winner is: " << tournament.getFittest()->to_string_() << std::endl;
 	return tournament.getFittest();

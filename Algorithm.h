@@ -9,7 +9,7 @@ public:
 	Algorithm();
 	~Algorithm();
 
-	static Population evolvePopulation(Population &population);
+	static std::shared_ptr<Population> evolvePopulation(std::shared_ptr<Population> population);
 private:
 	static double uniformRate;
 	static double mutationRate;
@@ -18,6 +18,6 @@ private:
 
 	static std::shared_ptr<Individual> crossover(std::shared_ptr<Individual> individual1, std::shared_ptr<Individual> individual2);
 	static void mutate(std::shared_ptr<Individual> individual);
-	static std::shared_ptr<Individual> tournamentSelection(Population &population);
+	static std::shared_ptr<Individual> tournamentSelection(std::shared_ptr<Population> population);
 };
 

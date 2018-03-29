@@ -22,7 +22,7 @@ Population::~Population()
 void Population::saveIndividual(std::shared_ptr<Individual> individual)
 {
 	individuals.push_back(individual);
-	std::cout << individual->to_string_() << std::endl;
+	//std::cout << individual->to_string_() << std::endl;
 }
 
 std::shared_ptr<Individual> Population::getFittest()
