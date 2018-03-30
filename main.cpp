@@ -12,13 +12,13 @@ void renderAll()
 int main(int argc, char *args[])
 {
 	srand(time(NULL));
-	std::string solution = "1111000000000000000000000000000000000000000000000000000000001111";
-	GeneticAlgorithm geneticAlgorithm;
-	geneticAlgorithm.run(50, solution.size(), solution);
+	//std::string solution = "1111000000000000000000000000000000000000000000000000000000001111";
+	//GeneticAlgorithm geneticAlgorithm;
+	//geneticAlgorithm.run(50, solution.size(), solution);
 	
 	
-	//Logic logic(60, 60);
-	//logic.run();
+	Logic logic(5, 5);
+	logic.run();
 	
 	system("pause");
 	return 0;

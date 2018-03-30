@@ -9,6 +9,7 @@
 #include "ARobot.h"
 #include "TRobot.h"
 #include "Button.h"
+#include "GeneticAlgorithm.h"
 
 
 enum LogicalState 
@@ -18,6 +19,7 @@ enum LogicalState
 	makeMazeUnperfect,
 	aStar,
 	tremaux,
+	GA,
 	systemPause,
 	closeWindow
 };
@@ -34,6 +36,7 @@ public:
 	void createMaze();
 	void makeUnperfect();
 	void AStarSolveMaze();
+	void GASolveMaze();
 	void tremauxSolveMaze();
 	void pauseSystem();
 private:

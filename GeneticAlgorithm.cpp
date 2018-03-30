@@ -13,8 +13,9 @@ GeneticAlgorithm::~GeneticAlgorithm()
 {
 }
 
-void GeneticAlgorithm::run(int populationSize, int genesSize, std::string solution)
+void GeneticAlgorithm::run(int populationSize, int genesSize, Maze &maze)
 {
+	std::string solution = "111111111111111111111111";
 	//Population population(populationSize, true, genesSize, solution);
 	std::shared_ptr<Population> population = std::make_shared<Population>(populationSize, true, genesSize, solution);
 	//std::cout << "Fittest: ";

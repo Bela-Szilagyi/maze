@@ -94,7 +94,7 @@ bool Logic::doLogic()
 		waitToStartButtonPush();
 		return false;
 	}
-	if (logicalState == create)
+	else if (logicalState == create)
 	{
 		createMaze();
 		return false;
@@ -112,6 +112,11 @@ bool Logic::doLogic()
 	else if (logicalState == tremaux)
 	{
 		tremauxSolveMaze();
+		return false;
+	}
+	else if (logicalState == GA)
+	{
+		GASolveMaze(); //std::cout << "AStar algo begins\n";
 		return false;
 	}
 	else if (logicalState == systemPause) { 
@@ -240,7 +245,7 @@ void Logic::makeUnperfect()
 	std::cout << "Making maze unperfect done\n";
 	display.showMaze(maze, nullptr);
 	//logicalState = aStar;
-	logicalState = tremaux;
+	logicalState = GA;
 }
 
 void Logic::AStarSolveMaze()
@@ -262,6 +267,16 @@ void Logic::AStarSolveMaze()
 	}
 	logicalState = tremaux;
 
+}
+
+void Logic::GASolveMaze()
+{
+	std::cout << "GA robot is online" << std::endl;
+	GeneticAlgorithm geneticAlgorithm;
+	std::string solution = "1111";
+	geneticAlgorithm.run(50, 24, maze);
+
+	logicalState = systemPause;
 }
 
 void Logic::tremauxSolveMaze()
