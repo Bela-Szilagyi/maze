@@ -15,7 +15,7 @@ public:
 	~Individual();
 	
 	void generateIndividual();
-	int getFitness(Maze &maze);
+	double getFitness(Maze &maze);
 	//static void setDefaultGeneLength(int length);
 	int size() { return genes.size(); }
 	int getGene(int index) { return genes[index]; }
@@ -35,14 +35,14 @@ public:
 	static std::vector<int> solution;
 	static void setSolution(std::vector<int> newSolution);
 	static void setSolution(std::string newSolution);
-	static int getFitness(Individual individual, Maze &maze);
-	static int getMaxFitness();
+	static double getFitness(Individual individual, Maze &maze);
+	static double getMaxFitness();
 	static std::shared_ptr<Cell> moveToNextCell(std::shared_ptr<Cell> currentCell, std::string currentDirerction);
-	static int calcFitness(std::shared_ptr<Cell> currentCell, std::shared_ptr<Cell> goal, int moveCount);
+	static double calcFitness(std::shared_ptr<Cell> currentCell, std::shared_ptr<Cell> goal, int nSteps);
 
 private:
 	//static int defaultGeneLength;
-	int fitness = 0;
+	double fitness = 0;
 	int geneLength;
 	//int genes[defaultGeneLength];
 	std::vector<int> genes;

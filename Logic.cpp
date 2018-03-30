@@ -273,7 +273,7 @@ void Logic::GASolveMaze()
 {
 	std::cout << "GA robot is online" << std::endl;
 	GeneticAlgorithm geneticAlgorithm;
-	std::vector< std::shared_ptr<Cell> > path = geneticAlgorithm.solveMaze(50, maze.width * 12, maze);
+	std::vector< std::shared_ptr<Cell> > path = geneticAlgorithm.solveMaze(100, maze.width * 12, maze);
 
 	SDL_Event SDL_event;
 

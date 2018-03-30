@@ -7,6 +7,7 @@ Population::Population(int populationSize, bool initialise, Maze &maze, int gene
 	if (initialise)
 	{
 		//Individual::setSolution(solution);
+		//individuals.clear();
 		for (int i = 0; i < size(); ++i)
 		{
 			std::shared_ptr<Individual> newIndividual = std::make_shared<Individual>(genesSize);

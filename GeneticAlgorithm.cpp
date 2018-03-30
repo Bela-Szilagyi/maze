@@ -29,10 +29,21 @@ std::vector< std::shared_ptr<Cell> > GeneticAlgorithm::solveMaze(int populationS
 	}*/
 
 	int generationCnt = 0;
+	int conversionCount = 0;
+	double oldFitness = 100;
 	while (population->getFittest(maze)->getFitness(maze) < Individual::getMaxFitness()) {
-		++generationCnt;
-		std::cout << "Generation: " << generationCnt << ", Fittest: " << population->getFittest(maze)->getFitness(maze) << ", genes of the fittest: " << population->getFittest(maze)->to_string_() << std::endl;
+		++generationCnt; ++conversionCount;
+		if(oldFitness < population->getFittest(maze)->getFitness(maze)) conversionCount = 0;
+		//std::cout << "OF: " << oldFitness << ", NF: " << population->getFittest(maze)->getFitness(maze);
+		std::cout << " Generation: " << generationCnt << ", not converged rounds: " << conversionCount << ", Fittest: " << population->getFittest(maze)->getFitness(maze) << std::endl;//<< ", genes of the fittest: " << population->getFittest(maze)->to_string_() << std::endl;
+		oldFitness = population->getFittest(maze)->getFitness(maze);
 		population = Algorithm::evolvePopulation(population, maze);
+		if (conversionCount == 2000) {
+			population = std::make_shared<Population>(population->size(), true, maze, genesSize);
+			//population = newPopulation;
+			conversionCount = 0;
+		}
+		
 	}
 	std::cout << std::endl;
 	std::cout << "Solution found!" << std::endl;

@@ -17,7 +17,7 @@ int main(int argc, char *args[])
 	//geneticAlgorithm.run(50, solution.size(), solution);
 	
 	
-	Logic logic(5, 5);
+	Logic logic(10, 10);
 	logic.run();
 	
 	//system("pause");

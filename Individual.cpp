@@ -23,7 +23,7 @@ void Individual::generateIndividual()
 	}
 }
 
-int Individual::getFitness(Maze &maze)
+double Individual::getFitness(Maze &maze)
 {
 	if (fitness == 0)
 	{
@@ -61,7 +61,7 @@ void Individual::setSolution(std::string newSolution)
 	}
 }
 
-int Individual::getFitness(Individual individual, Maze &maze)
+double Individual::getFitness(Individual individual, Maze &maze)
 {
 	/*
 	std::string cd = "11"; //Down = south
@@ -73,9 +73,10 @@ int Individual::getFitness(Individual individual, Maze &maze)
 	
 	std::string currentDirerction;
 	std::shared_ptr<Cell> currentCell = maze.cells[0];
+	std::shared_ptr<Cell> start = maze.cells[0];
 	int indexOfLastElement = maze.width * maze.height - 1;
 	std::shared_ptr<Cell> goal = maze.cells[indexOfLastElement];
-	int fitness = calcFitness(currentCell, goal, 0);
+	double fitness = calcFitness(currentCell, goal, 0);
 	//std::cout << currentCell->value << " Fitness: " << fitness << ", genes: " << individual.getGenes() << std::endl;
 	for (int i = 0; i < individual.size(); i = i + 2)
 	{
@@ -100,7 +101,7 @@ int Individual::getFitness(Individual individual, Maze &maze)
 	return fitness;
 }
 
-int Individual::getMaxFitness()
+double Individual::getMaxFitness()
 {
 	//return solution.size();
 	return 100;
@@ -116,10 +117,11 @@ std::shared_ptr<Cell> Individual::moveToNextCell(std::shared_ptr<Cell> currentCe
 	return result;
 }
 
-int Individual::calcFitness(std::shared_ptr<Cell> currentCell, std::shared_ptr<Cell> goal, int moveCount)
+double Individual::calcFitness(std::shared_ptr<Cell> currentCell, std::shared_ptr<Cell> goal, int nSteps)
 {
 	
 	int distanceFromGoal = std::abs((int)currentCell->col - (int)goal->col) + std::abs((int)currentCell->row - (int)goal->row);
+	//int distanceFromStart = std::abs((int)currentCell->col - (int)start->col) + std::abs((int)currentCell->row - (int)start->row);
 	// TODO: make this more intelligent
-	return 100 - distanceFromGoal;
+	return 100 - distanceFromGoal + 0.01 * nSteps;
 }
