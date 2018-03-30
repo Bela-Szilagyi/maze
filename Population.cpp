@@ -1,11 +1,12 @@
 #include <iostream>
 #include "Population.h"
 
-Population::Population(int populationSize, bool initialise, int genesSize, std::string solution) : populationSize(populationSize)
+
+Population::Population(int populationSize, bool initialise, Maze &maze, int genesSize) : populationSize(populationSize), maze(maze)
 {
 	if (initialise)
 	{
-		Individual::setSolution(solution);
+		//Individual::setSolution(solution);
 		for (int i = 0; i < size(); ++i)
 		{
 			std::shared_ptr<Individual> newIndividual = std::make_shared<Individual>(genesSize);
@@ -25,11 +26,11 @@ void Population::saveIndividual(std::shared_ptr<Individual> individual)
 	//std::cout << individual->to_string_() << std::endl;
 }
 
-std::shared_ptr<Individual> Population::getFittest()
+std::shared_ptr<Individual> Population::getFittest(Maze &maze)
 {
 	std::shared_ptr<Individual> fittest = individuals[0];
 	for (int i = 0; i < size(); ++i) {
-		if (fittest->getFitness() <= getIndividual(i)->getFitness()) 
+		if (fittest->getFitness(maze) <= getIndividual(i)->getFitness(maze)) 
 		{
 			fittest = getIndividual(i);
 		}

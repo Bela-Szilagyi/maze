@@ -171,8 +171,8 @@ void Logic::createMaze()
 		//std::cout << "carving\n";
 	} while (!(maze.unvisitedNeighbors.empty() && maze.stack.empty())); //2. While there are unvisited cells
 	
-	
-	/*maze.removeWall(currCell, currCell->sNeighbor);
+	/*
+	maze.removeWall(currCell, currCell->sNeighbor);
 	currCell = currCell->eNeighbor;
 	maze.removeWall(currCell, currCell->sNeighbor);
 	maze.removeWall(currCell, currCell->eNeighbor);
@@ -273,8 +273,19 @@ void Logic::GASolveMaze()
 {
 	std::cout << "GA robot is online" << std::endl;
 	GeneticAlgorithm geneticAlgorithm;
-	std::string solution = "1111";
-	geneticAlgorithm.run(50, 24, maze);
+	std::vector< std::shared_ptr<Cell> > path = geneticAlgorithm.solveMaze(50, maze.width * 12, maze);
+
+	SDL_Event SDL_event;
+
+	for (auto& cella : path) {
+		cella->isInAStarPath = true;
+		display.showMaze(maze, cella);
+		if (SDL_PollEvent(&SDL_event) != 0 && SDL_event.type == SDL_QUIT) {
+			logicalState = closeWindow;
+			return;
+		}
+		//SDL_Delay(200);
+	}
 
 	logicalState = systemPause;
 }

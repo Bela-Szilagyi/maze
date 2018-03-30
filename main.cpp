@@ -20,7 +20,7 @@ int main(int argc, char *args[])
 	Logic logic(5, 5);
 	logic.run();
 	
-	system("pause");
+	//system("pause");
 	return 0;
 }
 

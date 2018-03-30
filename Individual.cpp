@@ -23,11 +23,11 @@ void Individual::generateIndividual()
 	}
 }
 
-int Individual::getFitness()
+int Individual::getFitness(Maze &maze)
 {
 	if (fitness == 0)
 	{
-		fitness = getFitness(*this);
+		fitness = getFitness(*this, maze);
 	}
 	return fitness;
 }
@@ -61,20 +61,65 @@ void Individual::setSolution(std::string newSolution)
 	}
 }
 
-int Individual::getFitness(Individual individual)
+int Individual::getFitness(Individual individual, Maze &maze)
 {
-	int fitness = 0;
-	for (int i = 0; i < individual.size(); ++i)
+	/*
+	std::string cd = "11"; //Down = south
+	std::shared_ptr<Cell> currentCell_ = maze.cells[0];
+	currentCell_ = moveToNextCell(currentCell_, cd);
+	std::cout << "value: " << currentCell_->value << std::endl;
+	return 6;
+	*/
+	
+	std::string currentDirerction;
+	std::shared_ptr<Cell> currentCell = maze.cells[0];
+	int indexOfLastElement = maze.width * maze.height - 1;
+	std::shared_ptr<Cell> goal = maze.cells[indexOfLastElement];
+	int fitness = calcFitness(currentCell, goal, 0);
+	//std::cout << currentCell->value << " Fitness: " << fitness << ", genes: " << individual.getGenes() << std::endl;
+	for (int i = 0; i < individual.size(); i = i + 2)
 	{
-		if (individual.getGene(i) == solution[i])
+		//std::cout << currentCell->value << std::endl;
+		currentDirerction = std::to_string(individual.getGene(i)) + std::to_string(individual.getGene(i + 1));
+		//std::cout << currentDirerction << std::endl;
+		//currentCell = moveToNextCell(currentCell, currentDirerction);
+		currentCell = moveToNextCell(currentCell, currentDirerction);
+		if (currentCell)
 		{
-			fitness++;
+			// TODO: make this more intelligent:
+			if (currentCell == goal) return 100;
+			fitness = calcFitness(currentCell, goal, i / 2);
+			//std::cout << currentCell->value << " Fitness: " << fitness << ", genes: " << individual.getGenes() <<std::endl;
+		}
+		else
+		{
+			break;
 		}
 	}
+	
 	return fitness;
 }
 
 int Individual::getMaxFitness()
 {
-	return solution.size();
+	//return solution.size();
+	return 100;
+}
+
+std::shared_ptr<Cell> Individual::moveToNextCell(std::shared_ptr<Cell> currentCell, std::string currentDirerction)
+{
+	std::shared_ptr<Cell> result = nullptr;
+	if (currentDirerction == "00" && !currentCell->nWall) result = currentCell->nNeighbor;
+	if (currentDirerction == "11" && !currentCell->eWall) result = currentCell->eNeighbor;
+	if (currentDirerction == "10" && !currentCell->sWall) result = currentCell->sNeighbor;
+	if (currentDirerction == "01" && !currentCell->wWall) result = currentCell->wNeighbor;
+	return result;
+}
+
+int Individual::calcFitness(std::shared_ptr<Cell> currentCell, std::shared_ptr<Cell> goal, int moveCount)
+{
+	
+	int distanceFromGoal = std::abs((int)currentCell->col - (int)goal->col) + std::abs((int)currentCell->row - (int)goal->row);
+	// TODO: make this more intelligent
+	return 100 - distanceFromGoal;
 }

@@ -10,6 +10,6 @@ class GeneticAlgorithm
 public:
 	GeneticAlgorithm();
 	~GeneticAlgorithm();
-	void run(int populationSize, int genesSize, Maze &maze);
+	std::vector< std::shared_ptr<Cell> > solveMaze(int populationSize, int genesSize, Maze &maze);
 };
 

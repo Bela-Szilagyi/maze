@@ -1,7 +1,7 @@
 #include "Algorithm.h"
 
 double Algorithm::uniformRate = 0.50;
-double Algorithm::mutationRate = 0.015;
+double Algorithm::mutationRate = 0.2;
 int Algorithm::tournamentSize = 5;
 bool Algorithm::elitism = true;
 
@@ -14,16 +14,16 @@ Algorithm::~Algorithm()
 {
 }
 
-std::shared_ptr<Population>  Algorithm::evolvePopulation(std::shared_ptr<Population> population)
+std::shared_ptr<Population>  Algorithm::evolvePopulation(std::shared_ptr<Population> population, Maze &maze)
 {
 	//std::cout << "Evolving population...." << std::endl;
 	// TODO: implement this function
 
-	std::shared_ptr<Population> newPopulation = std::make_shared<Population>(population->size(), false);
+	std::shared_ptr<Population> newPopulation = std::make_shared<Population>(population->size(), false, maze);
 
 	if (elitism)
 	{
-		newPopulation->saveIndividual(population->getFittest());
+		newPopulation->saveIndividual(population->getFittest(maze));
 	}
 
 	int elitismOffset;
@@ -35,8 +35,8 @@ std::shared_ptr<Population>  Algorithm::evolvePopulation(std::shared_ptr<Populat
 	}
 
 	for (int i = elitismOffset; i < population->size(); ++i) {
-		std::shared_ptr<Individual> indiv1 = tournamentSelection(population);
-		std::shared_ptr<Individual> indiv2 = tournamentSelection(population);
+		std::shared_ptr<Individual> indiv1 = tournamentSelection(population, maze);
+		std::shared_ptr<Individual> indiv2 = tournamentSelection(population, maze);
 		std::shared_ptr<Individual> newIndiv = crossover(indiv1, indiv2);
 		newPopulation->saveIndividual(newIndiv);
 	}
@@ -68,16 +68,18 @@ std::shared_ptr<Individual> Algorithm::crossover(std::shared_ptr<Individual> ind
 {
 	std::shared_ptr<Individual> result = std::make_shared<Individual>(individual1->size());
 	int randomNumber;
-	for (int i = 0; i < individual1->size(); ++i)
+	for (int i = 0; i < individual1->size(); i = i + 2)
 	{
 		randomNumber = rand() % 100 + 1;
 		if (randomNumber <= (int)(uniformRate * 10))
 		{
 			result->setGene(i, individual1->getGene(i));
+			result->setGene(i + 1, individual1->getGene(i + 1));
 		} 
 		else
 		{
 			result->setGene(i, individual2->getGene(i));
+			result->setGene(i + 1, individual2->getGene(i + 1));
 		}
 	}
 	return result;
@@ -93,9 +95,9 @@ void Algorithm::mutate(std::shared_ptr<Individual> individual)
 	}
 }
 
-std::shared_ptr<Individual> Algorithm::tournamentSelection(std::shared_ptr<Population> population)
+std::shared_ptr<Individual> Algorithm::tournamentSelection(std::shared_ptr<Population> population, Maze &maze)
 {
-	Population tournament(tournamentSize, false);
+	Population tournament(tournamentSize, false, maze);
 	//std::cout << "They are going to a tournament: " << std::endl;
 	for (int i = 0; i < tournamentSize; ++i)
 	{
@@ -104,5 +106,5 @@ std::shared_ptr<Individual> Algorithm::tournamentSelection(std::shared_ptr<Popul
 		tournament.saveIndividual(population->getIndividual(randomId));
 	}
 	//std::cout << "And the winner is: " << tournament.getFittest()->to_string_() << std::endl;
-	return tournament.getFittest();
+	return tournament.getFittest(maze);
 }
