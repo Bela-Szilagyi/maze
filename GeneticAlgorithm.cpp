@@ -41,11 +41,11 @@ std::vector< std::shared_ptr<Cell> > GeneticAlgorithm::solveMaze(int populationS
 		//std::cout << " distfromgoal: " << population->getFittest(maze)->minDistanceFromGoal << " ";
 		oldFitness = population->getFittest(maze)->getFitness(maze);
 		population = Algorithm::evolvePopulation(population, maze);
-		//if (conversionCount == 2000) {
-		//	population = std::make_shared<Population>(population->size(), true, maze, genesSize);
+		if (conversionCount == 500) {
+			population = std::make_shared<Population>(population->size(), true, maze, genesSize);
 		//	//population = newPopulation;
-		//	conversionCount = 0;
-		//}
+			conversionCount = 0;
+		}
 		
 		//if (generationCnt == 4000) break;
 		
