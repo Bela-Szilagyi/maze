@@ -40,4 +40,6 @@ public:
 	unsigned int row;
 	unsigned int fScore;
 	unsigned int gScore;
+
+	//bool operator==(Cell cell) { return value == cell.value; }
 };

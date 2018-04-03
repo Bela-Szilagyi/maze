@@ -48,6 +48,22 @@ std::string Individual::to_string_()
 	return result;
 }
 
+std::string Individual::to_string_h()
+{
+	std::string result = "";
+	std::string currentDirerction;
+	for (int i = 0; i < size(); i = i + 2)
+	{
+		currentDirerction = std::to_string(genes[i]) + std::to_string(genes[i+1]);
+
+		if(currentDirerction == "00") result += "N";
+		else if (currentDirerction == "01") result += "W";
+		else if (currentDirerction == "10") result += "S";
+		else if (currentDirerction == "11") result += "E";
+	}
+	return result;
+}
+
 void Individual::setSolution(std::vector<int> newSolution)
 {
 	solution = newSolution;
@@ -70,15 +86,22 @@ double Individual::getFitness(Individual individual, Maze &maze)
 	std::cout << "value: " << currentCell_->value << std::endl;
 	return 6;
 	*/
-	
+	std::vector<int> visitedCells;
 	std::string currentDirerction;
 	std::shared_ptr<Cell> currentCell = maze.cells[0];
 	std::shared_ptr<Cell> start = maze.cells[0];
+	visitedCells.push_back(start->value);
 	int indexOfLastElement = maze.width * maze.height - 1;
 	std::shared_ptr<Cell> goal = maze.cells[indexOfLastElement];
-	double fitness = calcFitness(currentCell, goal, 0);
+	//double fitness_ = calcFitness(currentCell, goal, start, 0, false);
+	double fitness_;
 	//std::cout << currentCell->value << " Fitness: " << fitness << ", genes: " << individual.getGenes() << std::endl;
-	for (int i = 0; i < individual.size(); i = i + 2)
+	
+	//std::cout << "value: " << visitedCells[0]->value << std::endl;
+	bool containsVisitedCell = false;
+	std::shared_ptr<Cell> lastCurrentCell = currentCell;
+	int i = 0;
+	for (i = 0; i < individual.size(); i = i + 2)
 	{
 		//std::cout << currentCell->value << std::endl;
 		currentDirerction = std::to_string(individual.getGene(i)) + std::to_string(individual.getGene(i + 1));
@@ -87,18 +110,59 @@ double Individual::getFitness(Individual individual, Maze &maze)
 		currentCell = moveToNextCell(currentCell, currentDirerction);
 		if (currentCell)
 		{
+			lastCurrentCell = currentCell;
 			// TODO: make this more intelligent:
 			if (currentCell == goal) return 100;
-			fitness = calcFitness(currentCell, goal, i / 2);
+			
+
+
+			if (!containsVisitedCell)
+			{
+				for (int i = 0; i < visitedCells.size(); ++i)
+				{
+					//std::cout << "value: " << visitedCells[i]->value << std::endl;
+					if (currentCell->value == visitedCells[i])
+					{
+						containsVisitedCell = true;
+						break;
+					}
+				}
+			}
+			
+			int distanceFromGoal = std::abs((int)currentCell->col - (int)goal->col) + std::abs((int)currentCell->row - (int)goal->row);
+			//int distanceFromGoal = std::abs((int)currentCell->col);
+			if (distanceFromGoal < minDistanceFromGoal)
+			{
+				//setMinDistanceFromGoal(individual, distanceFromGoal);
+				minDistanceFromGoal = distanceFromGoal;
+			}
+			//else
+			//{
+			//distanceFromGoal = minDistanceFromGoal;
+			//}
+
+
+			//if (std::find(visitedCells.begin(), visitedCells.end(), currentCell->value) != visitedCells.end()) containsVisitedCell = true;
+			
+			visitedCells.push_back(currentCell->value);
+			//fitness_ = calcFitness(currentCell, goal, start, i / 2, containsVisitedCell);
 			//std::cout << currentCell->value << " Fitness: " << fitness << ", genes: " << individual.getGenes() <<std::endl;
+			
+			/*if (std::find(visitedCells.begin(), visitedCells.end(), currentCell) != visitedCells.end())
+			{
+				std::cout << currentCell->value << std::endl;
+			}*/
+			//std::cout << "contains visited cell: " << containsVisitedCell << " FITNESS: " << fitness << std::endl;
 		}
 		else
 		{
 			break;
 		}
 	}
-	
-	return fitness;
+	//std::cout << lastCurrentCell->value << std::endl;
+	fitness_ = calcFitness(minDistanceFromGoal, lastCurrentCell, goal, start, i / 2, containsVisitedCell);
+	//fitness = fitness_;
+	return fitness_;
 }
 
 double Individual::getMaxFitness()
@@ -117,11 +181,29 @@ std::shared_ptr<Cell> Individual::moveToNextCell(std::shared_ptr<Cell> currentCe
 	return result;
 }
 
-double Individual::calcFitness(std::shared_ptr<Cell> currentCell, std::shared_ptr<Cell> goal, int nSteps)
+double Individual::calcFitness(int minDist, std::shared_ptr<Cell> currentCell, std::shared_ptr<Cell> goal, std::shared_ptr<Cell> start, int nSteps, bool containsVisitedCell)
 {
 	
-	int distanceFromGoal = std::abs((int)currentCell->col - (int)goal->col) + std::abs((int)currentCell->row - (int)goal->row);
+	//int distanceFromGoal = std::abs((int)currentCell->col - (int)goal->col) + std::abs((int)currentCell->row - (int)goal->row);
+	
+	//int distanceFromGoal = std::abs((int)currentCell->col);
+	/*if (distanceFromGoal < minDistanceFromGoal)
+	{
+		//setMinDistanceFromGoal(individual, distanceFromGoal);
+		minDistanceFromGoal = distanceFromGoal;
+	}
+	else
+	{
+		distanceFromGoal = minDistanceFromGoal;
+	}*/
+	
 	//int distanceFromStart = std::abs((int)currentCell->col - (int)start->col) + std::abs((int)currentCell->row - (int)start->row);
 	// TODO: make this more intelligent
-	return 100 - distanceFromGoal + 0.01 * nSteps;
+	//return 10 - 0.01*distanceFromGoal +  nSteps;
+	//return distanceFromStart + 2.1*nSteps - distanceFromGoal;
+	//return nSteps;
+	int containsVisitedCellFee = 0;
+	if (containsVisitedCell) containsVisitedCellFee = 10000;
+
+	return 10 - minDist +  0.1*nSteps - containsVisitedCellFee;
 }

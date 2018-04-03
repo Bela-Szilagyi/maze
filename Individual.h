@@ -13,6 +13,11 @@ class Individual
 public:
 	Individual(int geneLength);
 	~Individual();
+
+	int minDistanceFromGoal = 1000;
+
+	static int getMinDistanceFromGoal(Individual individual) { return individual.minDistanceFromGoal; }
+	static void setMinDistanceFromGoal(Individual individual, int value) { individual.minDistanceFromGoal = value; }
 	
 	void generateIndividual();
 	double getFitness(Maze &maze);
@@ -21,6 +26,7 @@ public:
 	int getGene(int index) { return genes[index]; }
 	void setGene(int index, int value);
 	std::string to_string_();
+	std::string to_string_h();
 	std::string getGenes()
 	{
 		std::string result = "";
@@ -35,10 +41,11 @@ public:
 	static std::vector<int> solution;
 	static void setSolution(std::vector<int> newSolution);
 	static void setSolution(std::string newSolution);
-	static double getFitness(Individual individual, Maze &maze);
-	static double getMaxFitness();
-	static std::shared_ptr<Cell> moveToNextCell(std::shared_ptr<Cell> currentCell, std::string currentDirerction);
-	static double calcFitness(std::shared_ptr<Cell> currentCell, std::shared_ptr<Cell> goal, int nSteps);
+	
+	double getFitness(Individual individual, Maze &maze);
+	double getMaxFitness();
+	std::shared_ptr<Cell> moveToNextCell(std::shared_ptr<Cell> currentCell, std::string currentDirerction);
+	double calcFitness(int minDist, std::shared_ptr<Cell> currentCell, std::shared_ptr<Cell> goal, std::shared_ptr<Cell> start, int nSteps, bool containsVisitedCell);
 
 private:
 	//static int defaultGeneLength;

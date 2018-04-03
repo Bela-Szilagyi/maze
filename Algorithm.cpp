@@ -1,7 +1,7 @@
 #include "Algorithm.h"
 
 double Algorithm::uniformRate = 0.50;
-double Algorithm::mutationRate = 0.2;
+double Algorithm::mutationRate = 0.015;
 int Algorithm::tournamentSize = 5;
 bool Algorithm::elitism = true;
 
@@ -34,8 +34,21 @@ std::shared_ptr<Population>  Algorithm::evolvePopulation(std::shared_ptr<Populat
 		elitismOffset = 0;
 	}
 
-	for (int i = elitismOffset; i < population->size(); ++i) {
-		std::shared_ptr<Individual> indiv1 = tournamentSelection(population, maze);
+	std::shared_ptr<Individual> copyOfFittest = std::make_shared<Individual>(population->getFittest(maze)->size());
+	std::string genesOfFittest = population->getFittest(maze)->getGenes();
+	//std::string genesOfFittest = "1111111111";
+	for (int i = 0; i < genesOfFittest.size(); ++i)
+	{
+		copyOfFittest->setGene(i, (int)genesOfFittest[i] - '0');
+	}
+	newPopulation->saveIndividual(copyOfFittest);
+
+	//std::cout << copyOfFittest->getGenes() << std::endl;
+
+	for (int i = elitismOffset+1; i < population->size(); ++i) {
+		//std::shared_ptr<Individual> indiv1 = tournamentSelection(population, maze);
+		std::shared_ptr<Individual> indiv1 = i < population->size() / 2 ? population->getFittest(maze) : copyOfFittest;
+		//std::shared_ptr<Individual> indiv1 = population->getFittest(maze);
 		std::shared_ptr<Individual> indiv2 = tournamentSelection(population, maze);
 		std::shared_ptr<Individual> newIndiv = crossover(indiv1, indiv2);
 		newPopulation->saveIndividual(newIndiv);
@@ -88,10 +101,19 @@ std::shared_ptr<Individual> Algorithm::crossover(std::shared_ptr<Individual> ind
 void Algorithm::mutate(std::shared_ptr<Individual> individual)
 {
 	int randomNumber;
-	for (int i = 0; i < individual->size(); ++i)
+	/*for (int i = 0; i < individual->size(); ++i)
 	{
 		randomNumber = rand() % 1000 + 1;
 		if (randomNumber <= (int) (mutationRate * 1000)) individual->setGene(i, rand() % 2);
+	}*/
+	for (int i = 0; i < individual->size(); i = i + 2)
+	{
+		randomNumber = rand() % 1000 + 1;
+		if (randomNumber <= (int)(mutationRate * 1000))
+		{
+			individual->setGene(i, rand() % 2);
+			individual->setGene(i + 1, rand() % 2);
+		}
 	}
 }
 

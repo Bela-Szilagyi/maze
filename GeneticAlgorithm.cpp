@@ -31,29 +31,38 @@ std::vector< std::shared_ptr<Cell> > GeneticAlgorithm::solveMaze(int populationS
 	int generationCnt = 0;
 	int conversionCount = 0;
 	double oldFitness = 100;
-	while (population->getFittest(maze)->getFitness(maze) < Individual::getMaxFitness()) {
+	// TODO !!!!!
+	//while (population->getFittest(maze)->getFitness(maze) < Individual::getMaxFitness()) {
+	while (population->getFittest(maze)->getFitness(maze) < 100) {
 		++generationCnt; ++conversionCount;
 		if(oldFitness < population->getFittest(maze)->getFitness(maze)) conversionCount = 0;
 		//std::cout << "OF: " << oldFitness << ", NF: " << population->getFittest(maze)->getFitness(maze);
-		std::cout << " Generation: " << generationCnt << ", not converged rounds: " << conversionCount << ", Fittest: " << population->getFittest(maze)->getFitness(maze) << std::endl;//<< ", genes of the fittest: " << population->getFittest(maze)->to_string_() << std::endl;
+		std::cout << " Generation: " << generationCnt << ", not converged rounds: " << conversionCount << ", Fittest: " << population->getFittest(maze)->getFitness(maze) << std::endl << ", genes of the fittest: " << population->getFittest(maze)->to_string_h() << std::endl;
+		//std::cout << " distfromgoal: " << population->getFittest(maze)->minDistanceFromGoal << " ";
 		oldFitness = population->getFittest(maze)->getFitness(maze);
 		population = Algorithm::evolvePopulation(population, maze);
-		if (conversionCount == 2000) {
-			population = std::make_shared<Population>(population->size(), true, maze, genesSize);
-			//population = newPopulation;
-			conversionCount = 0;
-		}
+		//if (conversionCount == 2000) {
+		//	population = std::make_shared<Population>(population->size(), true, maze, genesSize);
+		//	//population = newPopulation;
+		//	conversionCount = 0;
+		//}
+		
+		//if (generationCnt == 4000) break;
 		
 	}
 	std::cout << std::endl;
 	std::cout << "Solution found!" << std::endl;
 	std::cout << "Generation: " << generationCnt << std::endl;
-	std::cout << "Genes of the fittest: " << population->getFittest(maze)->to_string_() << std::endl;
+	std::cout << "Genes of the fittest: " << std::endl << population->getFittest(maze)->to_string_() << std::endl;
 	population = Algorithm::evolvePopulation(population, maze);
 	genes = population->getFittest(maze)->to_string_();
 	//std::cout << "Fittest after one cycle: ";
 	//std::cout << genes << std::endl;
 	
+	for(int i = 0; i < population->size(); ++i)
+	{
+		std::cout << population->getIndividual(i)->to_string_h() << std::endl;
+	}
 
 	// "export" the path of the fittest
 	path.push_back(maze.cells[0]);

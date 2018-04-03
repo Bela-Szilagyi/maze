@@ -198,6 +198,7 @@ void Logic::createMaze()
 	currCell = currCell->eNeighbor;
 	maze.removeWall(currCell, currCell->eNeighbor);
 	*/
+	//logicalState = GA;
 	logicalState = makeMazeUnperfect;
 	//logicalState = tremaux;
 
@@ -272,8 +273,9 @@ void Logic::AStarSolveMaze()
 void Logic::GASolveMaze()
 {
 	std::cout << "GA robot is online" << std::endl;
+	display.showMaze(maze, nullptr);
 	GeneticAlgorithm geneticAlgorithm;
-	std::vector< std::shared_ptr<Cell> > path = geneticAlgorithm.solveMaze(100, maze.width * 12, maze);
+	std::vector< std::shared_ptr<Cell> > path = geneticAlgorithm.solveMaze(150, maze.width * 16, maze);
 
 	SDL_Event SDL_event;
 
